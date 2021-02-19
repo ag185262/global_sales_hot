@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="contract-schedule-dn-pyspark-wf">
+   <global>
+     <job-tracker>${jobTracker}</job-tracker>
+     <name-node>${nameNode}</name-node>
+     <configuration>
+       <property>
+         <name>tez.queue.name</name>
+         <value>${queueName}</value>
+       </property>
+       <property>
+         <name>mapreduce.job.queuename</name>
+         <value>${queueName}</value>
+       </property>
+     </configuration>
+   </global>
+   <credentials>
+     <credential name="cred" type="hcat">
+       <property>
+         <name>hcat.metastore.principal</name>
+         <value>${jdbcPrincipal}</value>
+       </property>
+       <property>
+         <name>hcat.metastore.uri</name>
+         <value>${metaStoreUri}</value>
+       </property>
+     </credential>
+   </credentials>
+   <start to="fork_node_0" />
+   <fork name="fork_node_0">
+     <path start="d8-contract-line-svc-supp-01-ins" />
+     <path start="d8-contract-line-style-lk-01-ins" />
+     <path start="d8-contract-line-xref-01-ins" />
+     <path start="d8-contract-line-bill-01-ins" />
+     <path start="d8-contract-lvl-element-01-ins" />
+	 <path start="d8-contract-bill-invc-line-01-ins" />
+     <path start="d8-contr-bill-stream-01-ins" />
+	</fork>
+	<fork name="fork_node_1">
+	 <path start="d8-contract-group-lk-01-ins" />
+     <path start="d8-contract-group-xref-01-ins" />
+     <path start="d8-contract-party-role-01-ins" />
+     <path start="d8-contract-subline-bill-01-ins" />
+     <path start="d8-contract-header-svc-supp-01-ins" />
+     <path start="d8-ttmp-cust-acct-site-use-dn-ins" />
+   </fork>
+   <fork name="fork_node_2">
+     <path start="d8-contract-bill-status-ins" />
+     <path start="d8-contract-bill-invc-line-03-del" />
+   </fork>
+   <action cred="cred" name="d8-contract-group-lk-01-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${jobTracker}</job-tracker>
+       <name-node>${nameNode}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-group-lk-01-ins</name>
+       <jar>d8_contract_group_lk_01_ins.py</jar>
+       <spark-opts>
+			--queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+	   </spark-opts>
+     </spark>
+     <ok to="join_node_2" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-group-xref-01-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${jobTracker}</job-tracker>
+       <name-node>${nameNode}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-group-xref-01-ins</name>
+       <jar>d8_contract_group_xref_01_ins.py</jar>
+       <spark-opts>
+			--queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+	   </spark-opts>
+     </spark>
+     <ok to="join_node_2" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-line-style-lk-01-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${jobTracker}</job-tracker>
+       <name-node>${nameNode}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-line-style-lk-01-ins</name>
+       <jar>d8_contract_line_style_lk_01_ins.py</jar>
+       <spark-opts>
+			--queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+	   </spark-opts>
+     </spark>
+     <ok to="join_node_1" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-line-xref-01-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${jobTracker}</job-tracker>
+       <name-node>${nameNode}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-line-xref-01-ins</name>
+       <jar>d8_contract_line_xref_01_ins.py</jar>
+       <spark-opts>
+			--queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+	   </spark-opts>
+     </spark>
+     <ok to="join_node_1" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-lvl-element-01-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${jobTracker}</job-tracker>
+       <name-node>${nameNode}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-lvl-element-01-ins</name>
+       <jar>d8_contract_lvl_element_01_ins.py</jar>
+       <spark-opts>
+			--queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+		</spark-opts>
+     </spark>
+     <ok to="join_node_1" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-party-role-01-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${jobTracker}</job-tracker>
+       <name-node>${nameNode}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-party-role-01-ins</name>
+       <jar>d8_contract_party_role_01_ins.py</jar>
+       <spark-opts>
+			--queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+	   </spark-opts>
+     </spark>
+     <ok to="join_node_2" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-bill-invc-line-01-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${jobTracker}</job-tracker>
+       <name-node>${nameNode}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-bill-invc-line-01-ins</name>
+       <jar>d8_contract_bill_invc_line_01_ins.py</jar>
+       <spark-opts>
+			--queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+	   </spark-opts>
+     </spark>
+     <ok to="join_node_1" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-line-bill-01-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${jobTracker}</job-tracker>
+       <name-node>${nameNode}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-line-bill-01-ins</name>
+       <jar>d8_contract_line_bill_01_ins.py</jar>
+       <spark-opts>
+			--queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+	   </spark-opts>
+     </spark>
+     <ok to="join_node_1" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-subline-bill-01-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${jobTracker}</job-tracker>
+       <name-node>${nameNode}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-subline-bill-01-ins</name>
+       <jar>d8_contract_subline_bill_01_ins.py</jar>
+       <spark-opts>
+			--queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+	   </spark-opts>
+     </spark>
+     <ok to="join_node_2" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contr-bill-stream-01-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${jobTracker}</job-tracker>
+       <name-node>${nameNode}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contr-bill-stream-01-ins</name>
+       <jar>d8_contr_bill_stream_01_ins.py</jar>
+       <spark-opts>
+			--queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+	   </spark-opts>
+     </spark>
+     <ok to="join_node_1" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-header-svc-supp-01-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${jobTracker}</job-tracker>
+       <name-node>${nameNode}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-header-svc-supp-01-ins</name>
+       <jar>d8_contract_header_svc_supp_01_ins.py</jar>
+       <spark-opts>
+			--queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+	   </spark-opts>
+     </spark>
+     <ok to="join_node_2" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-line-svc-supp-01-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${jobTracker}</job-tracker>
+       <name-node>${nameNode}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-line-svc-supp-01-ins</name>
+       <jar>d8_contract_line_svc_supp_01_ins.py</jar>
+       <spark-opts>
+			--queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+	   </spark-opts>
+     </spark>
+     <ok to="join_node_1" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-ttmp-cust-acct-site-use-dn-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${jobTracker}</job-tracker>
+       <name-node>${nameNode}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-ttmp-cust-acct-site-use-dn-ins</name>
+       <jar>d8_ttmp_cust_acct_site_use_dn_ins.py</jar>
+       <spark-opts>
+			--queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+	   </spark-opts>
+     </spark>
+     <ok to="join_node_2" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-bill-sched-dn-01-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${jobTracker}</job-tracker>
+       <name-node>${nameNode}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-bill-sched-dn-01-ins</name>
+       <jar>d8_contract_bill_sched_dn_01_ins.py</jar>
+       <spark-opts>
+			--queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+	   </spark-opts>
+     </spark>
+     <ok to="fork_node_2" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-bill-status-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${jobTracker}</job-tracker>
+       <name-node>${nameNode}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-bill-status-ins</name>
+       <jar>d8_contract_bill_status_ins.py</jar>
+       <spark-opts>
+			--queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+	   </spark-opts>
+     </spark>
+     <ok to="join_node_0" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-bill-invc-line-03-del">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${jobTracker}</job-tracker>
+       <name-node>${nameNode}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-bill-invc-line-03-del</name>
+       <jar>d8_contract_bill_invc_line_03_del.py</jar>
+       <spark-opts>
+			--queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+	   </spark-opts>
+     </spark>
+     <ok to="join_node_0" />
+     <error to="fail" />
+   </action>
+   <join name="join_node_0" to="end" />
+   <join name="join_node_1" to="fork_node_1" />
+   <join name="join_node_2" to="d8-contract-bill-sched-dn-01-ins" />
+   <kill name="fail">
+      <message>Error while running workflow Contract_schedule_dn workflow</message>
+   </kill>
+   <end name="end" />
+</workflow-app>

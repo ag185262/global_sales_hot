@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="install-base-dn-hive-wf">
+   <global>
+      <job-tracker>${jobTracker}</job-tracker>
+      <name-node>${nameNode}</name-node>
+      <configuration>
+         <property>
+            <name>tez.queue.name</name>
+            <value>${queueName}</value>
+         </property>
+         <property>
+            <name>mapreduce.job.queuename</name>
+            <value>${queueName}</value>
+         </property>
+      </configuration>
+   </global>
+
+   <credentials>
+      <credential name="prd-cert" type="hive2">
+         <property>
+            <name>hive2.jdbc.url</name>
+            <value>${jdbcURL}</value>
+         </property>
+         <property>
+            <name>hive2.server.principal</name>
+            <value>${jdbcPrincipal}</value>
+         </property>
+      </credential>
+   </credentials>
+   
+   <start to="fork-node"/>
+
+	<fork name="fork-node">
+		<path start = "D8-Install-base-vrsn-lbl"/>
+		<path start = "D8-Install-base-item-sts"/>
+		<path start = "D8-Es-slm-class"/>
+		<path start = "D8-Cfs-attribute-value"/>
+		<path start = "D8-Cfs-extended-attribute-ld"/>
+		<path start = "D8-Install-Base-item"/>
+		<path start = "D8-Instal-Base-item-hist"/>
+		<path start = "D8-Install-base-plg"/>
+	</fork>
+   
+   <action cred="prd-cert" name="D8-Install-base-vrsn-lbl">
+      <hive2 xmlns="uri:oozie:hive2-action:0.2">
+         <jdbc-url>${jdbcURL}</jdbc-url>
+         <script>${appPath}/transformation/pub/install_base_dn/hive/D8-Install-base-vrsn-lbl.hive</script>
+      </hive2>
+      <ok to="join-node" />
+      <error to="fail" />
+   </action>
+   
+   <action cred="prd-cert" name="D8-Install-base-item-sts">
+      <hive2 xmlns="uri:oozie:hive2-action:0.2">
+         <jdbc-url>${jdbcURL}</jdbc-url>
+         <script>${appPath}/transformation/pub/install_base_dn/hive/D8-Install-base-item-sts.hive</script>
+      </hive2>
+      <ok to="join-node" />
+      <error to="fail" />
+   </action>
+   
+   <action cred="prd-cert" name="D8-Es-slm-class">
+      <hive2 xmlns="uri:oozie:hive2-action:0.2">
+         <jdbc-url>${jdbcURL}</jdbc-url>
+         <script>${appPath}/transformation/pub/install_base_dn/hive/D8-Es-slm-class.hive</script>
+      </hive2>
+      <ok to="join-node" />
+      <error to="fail" />
+   </action>
+   
+   <action cred="prd-cert" name="D8-Cfs-attribute-value">
+      <hive2 xmlns="uri:oozie:hive2-action:0.2">
+         <jdbc-url>${jdbcURL}</jdbc-url>
+         <script>${appPath}/transformation/pub/install_base_dn/hive/D8-Cfs-attribute-value.hive</script>
+      </hive2>
+      <ok to="join-node" />
+      <error to="fail" />
+   </action>
+   
+   <action cred="prd-cert" name="D8-Cfs-extended-attribute-ld">
+      <hive2 xmlns="uri:oozie:hive2-action:0.2">
+         <jdbc-url>${jdbcURL}</jdbc-url>
+         <script>${appPath}/transformation/pub/install_base_dn/hive/D8-Cfs-extended-attribute-ld.hive</script>
+      </hive2>
+      <ok to="join-node" />
+      <error to="fail" />
+   </action>
+   
+   <action cred="prd-cert" name="D8-Install-Base-item">
+      <hive2 xmlns="uri:oozie:hive2-action:0.2">
+         <jdbc-url>${jdbcURL}</jdbc-url>
+         <script>${appPath}/transformation/pub/install_base_dn/hive/D8-Install-Base-item.hive</script>
+      </hive2>
+      <ok to="join-node" />
+      <error to="fail" />
+   </action>
+   
+   <action cred="prd-cert" name="D8-Instal-Base-item-hist">
+      <hive2 xmlns="uri:oozie:hive2-action:0.2">
+         <jdbc-url>${jdbcURL}</jdbc-url>
+         <script>${appPath}/transformation/pub/install_base_dn/hive/D8-Instal-Base-item-hist.hive</script>
+      </hive2>
+      <ok to="join-node" />
+      <error to="fail" />
+   </action>
+   
+   <action cred="prd-cert" name="D8-Install-base-dn-ld-25">
+      <hive2 xmlns="uri:oozie:hive2-action:0.2">
+         <jdbc-url>${jdbcURL}</jdbc-url>
+         <script>${appPath}/transformation/pub/install_base_dn/hive/D8-Install-base-dn-ld-25.hive</script>
+      </hive2>
+      <ok to="D8-Install-base-dn-26-ld" />
+      <error to="fail" />
+   </action>
+   
+   <action cred="prd-cert" name="D8-Install-base-plg">
+      <hive2 xmlns="uri:oozie:hive2-action:0.2">
+         <jdbc-url>${jdbcURL}</jdbc-url>
+         <script>${appPath}/transformation/pub/install_base_dn/hive/D8-Install-base-plg.hive</script>
+      </hive2>
+      <ok to="join-node" />
+      <error to="fail" />
+   </action>
+   
+   <action cred="prd-cert" name="D8-Install-base-dn-26-ld">
+      <hive2 xmlns="uri:oozie:hive2-action:0.2">
+         <jdbc-url>${jdbcURL}</jdbc-url>
+         <script>${appPath}/transformation/pub/install_base_dn/hive/D8-Install-base-dn-26-ld.hive</script>
+      </hive2>
+      <ok to="end" />
+      <error to="fail" />
+   </action>
+   
+   <join name="join-node" to="D8-Install-base-dn-ld-25" />
+   
+   <action name="save_log_file">
+      <shell xmlns="uri:oozie:shell-action:0.2">
+         <job-tracker>${jobTracker}</job-tracker>
+         <name-node>${nameNode}</name-node>
+         <exec>save_log.sh</exec>
+         <file>${saveLogScriptPath}/save_log.sh</file>
+      </shell>
+      <ok to="end" />
+      <error to="fail" />
+   </action>
+   
+   <kill name="fail">
+      <message>Error in execution of install_base_dn workflow</message>
+   </kill>
+   
+   <end name="end" />
+   
+</workflow-app>

@@ -1,0 +1,64 @@
+<workflow-app xmlns="uri:oozie:workflow:0.5" name="wf_edl2edw_cfs_edl_edw_recon_process.xml">
+
+    <global>
+        <job-tracker>${jobTracker}</job-tracker>
+        <name-node>${nameNode}</name-node>
+        <configuration>
+            <property>
+                <name>tez.queue.name</name>
+                <value>${queueName}</value>
+            </property>
+            <property>
+                <name>mapreduce.job.queuename</name>
+                <value>${queueName}</value>
+            </property>
+        </configuration>
+    </global>
+
+    <credentials>
+        <credential name="hs2_credentials" type="hive2">
+            <property>
+                <name>hive2.server.principal</name>
+                <value>${jdbcPrincipal}</value>
+            </property>
+            <property>
+                <name>hive2.jdbc.url</name>
+                <value>${jdbcURL}</value>
+            </property>
+        </credential>
+    </credentials>
+
+    <start to="edl2edw_erp_edl_recon"/>
+  <action name="edl2edw_erp_edl_recon" cred="hs2_credentials">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <jdbc-url>${jdbcURL}</jdbc-url>
+            <script>${codeBaseDir}/transformation/edw/edl2edw_erp_edl_recon.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+                <argument>-hiveconf</argument>
+                <argument>hive.tez.container.size=${containerSize}</argument>
+                <argument>-hiveconf</argument>
+                <argument>hive.tez.java.opts=${heapSize}</argument>
+        </hive2>
+        <ok to="end"/>
+        <error to="Email-On-Fail"/>
+    </action>
+	
+				
+
+     <action name="Email-On-Fail">
+        <email xmlns="uri:oozie:email-action:0.2">
+            <to>${JOB_FAIL_EMAIL_LIST}</to>
+            <subject>PRD01 Job Failed : ${wf:name()} </subject>
+            <body>Workflow Action Failed, ${wf:id()}  Error Message :[${wf:errorMessage(wf:lastErrorNode())}]</body>
+        </email>
+        <ok to="kill"/>
+        <error to="kill"/>
+    </action>
+
+    <kill name="kill">
+        <message>Action Failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+    </kill>
+
+    <end name="end"/>
+
+</workflow-app>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="install-base-dn-spark-scala-wf">
+	<global>
+		<job-tracker>${job_tracker}</job-tracker>
+		<name-node>${name_node}</name-node>
+		<configuration>
+			<property>
+				<name>tez.queue.name</name>
+				<value>${queue_name}</value>
+			</property>
+			<property>
+				<name>mapreduce.job.queuename</name>
+				<value>${queue_name}</value>
+			</property>
+		</configuration>
+	</global>
+	<credentials>
+		<credential name="cred" type="hcat">
+			<property>
+				<name>hcat.metastore.uri</name>
+				<value>${metaStoreUri}</value>
+			</property>
+			<property>
+				<name>hcat.metastore.principal</name>
+				<value>${metastorePrincipal}</value>
+			</property>
+		</credential>
+	</credentials>
+	<start to="d8-install-base-plg"/>
+	
+	<action cred="cred" name="d8-install-base-plg">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8_install_base_plg</name>
+			<class>com.ncr.edl.apollo.install_base_dn.d8installbaseplgRunner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="d8-install-base-dn-ld-1" />
+		<error to="fail" />
+	</action>
+	<action cred="cred" name="d8-install-base-dn-ld-1">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8_install_base_dn_ld_1</name>
+			<class>com.ncr.edl.apollo.install_base_dn.d8installbasednld1Runner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="d8-install-base-dn-ld-2" />
+		<error to="fail" />
+	</action>
+	<action cred="cred" name="d8-install-base-dn-ld-2">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8_install_base_dn_ld_2</name>
+			<class>com.ncr.edl.apollo.install_base_dn.d8installbasednld2Runner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="d8-install-base-dn-ld-3" />
+		<error to="fail" />
+	</action>
+	<action cred="cred" name="d8-install-base-dn-ld-3">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8_install_base_dn_ld_3</name>
+			<class>com.ncr.edl.apollo.install_base_dn.d8installbasednld3Runner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="end" />
+		<error to="fail" />
+	</action>
+	<kill name="fail">
+		<message>Error in execution of install-base-dn-spark-scala-wf workflow: [${wf:errorMessage(wf:lastErrorNode())}]</message>
+	</kill>
+	<end name="end"/>
+</workflow-app>

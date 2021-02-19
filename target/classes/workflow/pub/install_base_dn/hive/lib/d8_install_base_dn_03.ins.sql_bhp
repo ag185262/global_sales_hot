@@ -1,0 +1,114 @@
+----------------------------------------------------------------------------------------
+--THIS FILE IS CREATED AUTOMATICALLY USING Workload Transformation @ 2019/12/18 11:40:25 
+--Script Name: d8_install_base_dn_03.ins.sql
+--Inputs:  
+--Outputs:
+
+--Modification History:
+--Date:     Current Date     Who:    
+--Control:              
+--Description:
+----------------------------------------------------------------------------------------
+
+
+--Original Query:
+  ----DATABASE ${TTMMPPDDBB}
+
+--Translated Query: SUCCESS
+
+    use ${TTMMPPDDBB};
+
+--Original Query:
+  ----DELETE FROM ${AAPPLLIIDD1EENNVV}_install_base_dn_t03 ALL
+
+--Translated Query: SUCCESS
+
+    TRUNCATE TABLE   ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t03_t;
+
+--Original Query:
+  ----LOCK TABLE ${EEDDWWDDBB2}.install_base_vrsn_lbl_ld FOR ACCESSLOCK TABLE ${AAPPLLIIDD1EENNVV}_install_base_dn_t02 FOR ACCESSINSERT INTO ${AAPPLLIIDD1EENNVV}_install_base_dn_t03(      instance_id     ,item_instance_id     ,active_end_date     ,active_start_date     ,actual_return_date     ,external_reference_nbr     ,install_date     ,install_location_id     ,install_location_type_code     ,inventory_item_id     ,inventory_master_org_id     ,item_instance_status_desc     ,item_instance_status_id     ,item_instance_status_name     ,item_instance_tran_code     ,last_order_line_id     ,last_valid_invtry_org_id     ,location_id     ,location_type_code     ,return_by_date     ,service_order_allowed_flag     ,status_tran_code     ,terminated_flag     ,version_label_date     ,version_label_desc     ,version_label_name     ,vrsn_lbl_tran_code     ,prev_site_nbr     ,service_tier_name,	 esd_flag,                   media_type,                 license_model,              license_start_date,         license_end_date           )SELECT      EDW2.instance_id     ,EDW2.item_instance_id     ,EDW2.active_end_date     ,EDW2.active_start_date     ,EDW2.actual_return_date     ,EDW2.external_reference_nbr     ,EDW2.install_date     ,EDW2.install_location_id     ,EDW2.install_location_type_code     ,EDW2.inventory_item_id     ,EDW2.inventory_master_org_id     ,EDW2.item_instance_status_desc     ,EDW2.item_instance_status_id     ,EDW2.item_instance_status_name     ,EDW2.item_instance_tran_code     ,EDW2.last_order_line_id     ,EDW2.last_valid_invtry_org_id     ,EDW2.location_id     ,EDW2.location_type_code     ,EDW2.return_by_date     ,EDW2.service_order_allowed_flag     ,EDW2.status_tran_code     ,EDW2.terminated_flag     ,CAST(IBVL.version_label_date_time AS DATE)     ,IBVL.version_label_desc     ,IBVL.version_label_name     <WM_COMMENT_START> vrns_lbl_tran_code <WM_COMMENT_END>     ,IBVL.tran_code     ,EDW2.prev_site_nbr     ,EDW2.service_tier_name,	 EDW2.esd_flag,                        EDW2.media_type,                      EDW2.license_model,                   EDW2.license_start_date,              EDW2.license_end_date           FROM  ${AAPPLLIIDD1EENNVV}_install_base_dn_t02 EDW2LEFT OUTER JOIN${EEDDWWDDBB2}.install_base_vrsn_lbl_ld IBVLON  EDW2.instance_id = IBVL.instance_idAND EDW2.item_instance_id = IBVL.item_instance_idAND (IBVL.instance_id,     IBVL.item_instance_id,     IBVL.version_label_id) IN	(SELECT instance_id,		item_instance_id,		MAX(version_label_id)	 FROM ${EEDDWWDDBB1}.install_base_vrsn_lbl_ld	 GROUP BY 1,2)
+
+--Translated Query: SUCCESS
+
+--    WITH IBVL AS (SELECT
+--        IBVL.* 
+ --   FROM
+--        TTMP.D8T_install_base_dn_t02 AS EDW2 
+--    LEFT OUTER  JOIN
+--        ${EEDDWWDDBB2}.install_base_vrsn_lbl_ld AS IBVL 
+--            ON (1=1) 
+--    WHERE
+--        (IBVL.instance_id,IBVL.item_instance_id,IBVL.version_label_id) IN(  SELECT
+--            DISTINCT instance_id AS auto_c00,
+--            item_instance_id AS auto_c01,
+--            MAX( version_label_id ) AS auto_c02  
+--        FROM
+--            ${EEDDWWDDBB1}.install_base_vrsn_lbl_ld      
+--        GROUP BY
+--            instance_id ,
+--            item_instance_id    ) 
+--        OR (IBVL.instance_id,IBVL.item_instance_id,IBVL.version_label_id) IS NULL  
+--        AND  (IBVL.instance_id,IBVL.item_instance_id,IBVL.version_label_id) IN(  SELECT
+--            DISTINCT instance_id AS auto_c00,
+--            item_instance_id AS auto_c01,
+--            MAX( version_label_id ) AS auto_c02  
+--        FROM
+--            ${EEDDWWDDBB1}.install_base_vrsn_lbl_ld      
+--        GROUP BY
+--            instance_id ,
+--            item_instance_id    ) ) INSERT 
+--        INTO
+--            TABLE
+--            ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t03           SELECT
+--                EDW2.instance_id,
+--                EDW2.item_instance_id,
+--                EDW2.active_end_date,
+--                EDW2.active_start_date,
+--                EDW2.actual_return_date,
+--                EDW2.external_reference_nbr,
+--                EDW2.install_date,
+--                EDW2.install_location_id,
+--                EDW2.install_location_type_code,
+--                EDW2.inventory_item_id,
+--                EDW2.inventory_master_org_id,
+--                EDW2.item_instance_status_desc,
+--                EDW2.item_instance_status_id,
+--                EDW2.item_instance_status_name,
+--                EDW2.item_instance_tran_code,
+--                EDW2.last_order_line_id,
+--                EDW2.last_valid_invtry_org_id,
+--                EDW2.location_id,
+--                EDW2.location_type_code,
+--                EDW2.return_by_date,
+--                EDW2.service_order_allowed_flag,
+--                EDW2.status_tran_code,
+--                EDW2.terminated_flag,
+--                CAST (IBVL.version_label_date_time AS date) AS auto_c023,
+--                IBVL.version_label_desc,
+--                IBVL.version_label_name,
+--                IBVL.tran_code,
+--                EDW2.prev_site_nbr,
+--                EDW2.service_tier_name,
+--                EDW2.esd_flag,
+--                EDW2.media_type,
+--                EDW2.license_model,
+--                EDW2.license_start_date,
+--                EDW2.license_end_date,
+--                null,
+--                null,
+--                null  
+--            FROM
+--                ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t02    AS EDW2   
+--            LEFT OUTER  JOIN
+--                ${EEDDWWDDBB2}.install_base_vrsn_lbl_ld    AS IBVL    
+--                    ON EDW2.instance_id = IBVL.instance_id  
+--                    AND EDW2.item_instance_id = IBVL.item_instance_id;
+
+--Translated Query: Further changed to remove 1=1 cross join condition and also used window functions instead of group by clause
+
+with qq1 as (SELECT version_label_date_time, version_label_desc, version_label_name, tran_code, instance_id, item_instance_id, version_label_id, rank() over (partition by instance_id, item_instance_id order by version_label_id DESC) AS RNK FROM ${EEDDWWDDBB2}.install_base_vrsn_lbl_ld)
+INSERT INTO  ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t03_t
+SELECT     EDW2.instance_id,EDW2.item_instance_id,EDW2.active_end_date,EDW2.active_start_date,EDW2.actual_return_date,EDW2.external_reference_nbr,EDW2.install_date,EDW2.install_location_id,EDW2.install_location_type_code,EDW2.inventory_item_id,EDW2.inventory_master_org_id,EDW2.item_instance_status_desc,EDW2.item_instance_status_id,EDW2.item_instance_status_name,EDW2.item_instance_tran_code,EDW2.last_order_line_id,EDW2.last_valid_invtry_org_id,EDW2.location_id,EDW2.location_type_code,EDW2.return_by_date,EDW2.service_order_allowed_flag,EDW2.status_tran_code,EDW2.terminated_flag,CAST(IBVL.version_label_date_time AS DATE),IBVL.version_label_desc,IBVL.version_label_name,IBVL.tran_code,EDW2.prev_site_nbr,EDW2.service_tier_name,    EDW2.esd_flag,EDW2.media_type,  EDW2.license_model,EDW2.license_start_date,EDW2.license_end_date, EDW2.cit_vendor_code, EDW2.mdm_product_identifier,EDW2.mdm_solution_identifier
+FROM ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t02 EDW2 LEFT OUTER JOIN
+(SELECT version_label_date_time, version_label_desc, version_label_name, tran_code, instance_id, item_instance_id, version_label_id, RNK FROM qq1 where RNK=1 ) IBVL
+ON EDW2.instance_id = IBVL.instance_id AND EDW2.item_instance_id = IBVL.item_instance_id ; 

@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="contract-unbilled-dn-spark-scala-wf">
+   <global>
+     <job-tracker>${job_tracker}</job-tracker>
+     <name-node>${name_node}</name-node>
+     <configuration>
+       <property>
+         <name>tez.queue.name</name>
+         <value>${queue_name}</value>
+       </property>
+       <property>
+         <name>mapreduce.job.queuename</name>
+         <value>${queue_name}</value>
+       </property>
+     </configuration>
+   </global>
+   <credentials>
+     <credential name="cred" type="hcat">
+       <property>
+         <name>hcat.metastore.principal</name>
+         <value>${metastorePrincipal}</value>
+       </property>
+       <property>
+         <name>hcat.metastore.uri</name>
+         <value>${metaStoreUri}</value>
+       </property>
+     </credential>
+   </credentials>
+   <start to="d8-contract-unbilled-dn-01-ins" />
+   <action cred="cred" name="d8-contract-unbilled-dn-01-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-unbilled-dn-01-ins</name>    
+       <class>com.ncr.edl.apollo.contract_unbilled_dn.d8contractunbilleddn01insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-contract-unbilled-dn-02-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-unbilled-dn-02-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-unbilled-dn-02-ins</name>    
+       <class>com.ncr.edl.apollo.contract_unbilled_dn.d8contractunbilleddn02insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-contract-unbilled-dn-03-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-unbilled-dn-03-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-unbilled-dn-03-ins</name>    
+       <class>com.ncr.edl.apollo.contract_unbilled_dn.d8contractunbilleddn03insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-contract-unbilled-dn-04-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-unbilled-dn-04-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-unbilled-dn-04-ins</name>    
+       <class>com.ncr.edl.apollo.contract_unbilled_dn.d8contractunbilleddn04insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-contract-unbilled-dn-05-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-unbilled-dn-05-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-unbilled-dn-05-ins</name>    
+       <class>com.ncr.edl.apollo.contract_unbilled_dn.d8contractunbilleddn05insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-contract-unbilled-dn-06-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-unbilled-dn-06-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-unbilled-dn-06-ins</name>    
+       <class>com.ncr.edl.apollo.contract_unbilled_dn.d8contractunbilleddn06insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-contract-unbilled-dn-07-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-unbilled-dn-07-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-unbilled-dn-07-ins</name>    
+       <class>com.ncr.edl.apollo.contract_unbilled_dn.d8contractunbilleddn07insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-contract-unbilled-dn-08-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-unbilled-dn-08-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-unbilled-dn-08-ins</name>    
+       <class>com.ncr.edl.apollo.contract_unbilled_dn.d8contractunbilleddn08insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-contract-unbilled-dn-09-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-unbilled-dn-09-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-unbilled-dn-09-ins</name>    
+       <class>com.ncr.edl.apollo.contract_unbilled_dn.d8contractunbilleddn09insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-contract-unbilled-dn-10-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-unbilled-dn-10-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-unbilled-dn-10-ins</name>    
+       <class>com.ncr.edl.apollo.contract_unbilled_dn.d8contractunbilleddn10insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-contract-unbilled-dn-11-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-unbilled-dn-11-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-unbilled-dn-11-ins</name>    
+       <class>com.ncr.edl.apollo.contract_unbilled_dn.d8contractunbilleddn11insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-contract-unbilled-dn-12-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-unbilled-dn-12-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-unbilled-dn-12-ins</name>    
+       <class>com.ncr.edl.apollo.contract_unbilled_dn.d8contractunbilleddn12insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-contract-unbilled-dn-13-1-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-unbilled-dn-13-1-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-unbilled-dn-13-1-ins</name>    
+       <class>com.ncr.edl.apollo.contract_unbilled_dn.d8contractunbilleddn131insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-contract-unbilled-dn-13-2-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-unbilled-dn-13-2-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-unbilled-dn-13-2-ins</name>    
+       <class>com.ncr.edl.apollo.contract_unbilled_dn.d8contractunbilleddn132insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-contract-unbilled-dn-ld-1-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-unbilled-dn-ld-1-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-unbilled-dn-ld-1-ins</name>    
+       <class>com.ncr.edl.apollo.contract_unbilled_dn.d8contractunbilleddnld1insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-contract-unbilled-dn-hd-ren" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-unbilled-dn-hd-ren">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-unbilled-dn-hd-ren</name>    
+       <class>com.ncr.edl.apollo.contract_unbilled_dn.d8contractunbilleddnhdrenRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-contract-unbilled-dn-ren" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-unbilled-dn-ren">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-unbilled-dn-ren</name>    
+       <class>com.ncr.edl.apollo.contract_unbilled_dn.d8contractunbilleddnrenRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-contract-unbilled-dn-ld-ren" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-unbilled-dn-ld-ren">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-unbilled-dn-ld-ren</name>    
+       <class>com.ncr.edl.apollo.contract_unbilled_dn.d8contractunbilleddnldrenRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-contract-unbilled-dn-ld-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-unbilled-dn-ld-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-unbilled-dn-ld-ins</name>    
+       <class>com.ncr.edl.apollo.contract_unbilled_dn.d8contractunbilleddnldinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="end" />
+     <error to="fail" />
+   </action>
+   <kill name="fail">
+      <message>Error while running workflow contract-unbilled-dn-spark-scala-wf workflow: [${wf:errorMessage(wf:lastErrorNode())}]</message>
+   </kill>
+   <end name="end" />
+</workflow-app>

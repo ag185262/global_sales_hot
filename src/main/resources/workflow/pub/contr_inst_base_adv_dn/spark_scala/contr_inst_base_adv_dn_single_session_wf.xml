@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="contr-inst-base-adv-dn-spark-scala-single-session-wf">
+   <global>
+     <job-tracker>${job_tracker}</job-tracker>
+     <name-node>${name_node}</name-node>
+     <configuration>
+       <property>
+         <name>tez.queue.name</name>
+         <value>${queue_name}</value>
+       </property>
+       <property>
+         <name>mapreduce.job.queuename</name>
+         <value>${queue_name}</value>
+       </property>
+     </configuration>
+   </global>
+   <credentials>
+     <credential name="cred" type="hcat">
+       <property>
+         <name>hcat.metastore.principal</name>
+         <value>${metastorePrincipal}</value>
+       </property>
+       <property>
+         <name>hcat.metastore.uri</name>
+         <value>${metaStoreUri}</value>
+       </property>
+     </credential>
+   </credentials>
+   <start to="contr_inst_base_adv_dn" />
+   
+   <action cred="cred" name="contr_inst_base_adv_dn">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>contr_inst_base_adv_dn</name>    
+       <class>com.ncr.edl.apollo.common.CommonSparkDriver</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg>${package_hierachy}</arg>
+       <arg>${file_execution_order}</arg>
+       <arg>${max_thread_pool_size}</arg>
+       <arg>${activityCountRequired}</arg>
+     </spark>
+     <ok to="end" />
+     <error to="fail" />
+   </action>
+   <kill name="fail">
+      <message>Error while running workflow contr-inst-base-adv-dn-spark-scala-single-session-wf workflow: [${wf:errorMessage(wf:lastErrorNode())}]</message>
+   </kill>
+   <end name="end" />
+</workflow-app>

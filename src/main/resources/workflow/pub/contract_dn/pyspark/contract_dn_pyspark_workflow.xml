@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="contract-dn-pyspark-wf">
+	<global>
+		<job-tracker>${jobTracker}</job-tracker>
+	    <name-node>${nameNode}</name-node>
+	    <configuration>
+	      	<property>
+	        	<name>tez.queue.name</name>
+        		<value>${queueName}</value>
+	      	</property>
+	      	<property>
+	        	<name>mapreduce.job.queuename</name>
+        		<value>${queueName}</value>
+	      	</property>
+	    </configuration>
+	</global>
+
+	<credentials>
+		<credential name="prd-cert" type="hcat">
+            <property>
+                <name>hcat.metastore.uri</name>
+                <value>${metaStoreUri}</value>
+            </property>
+            <property>
+                <name>hcat.metastore.principal</name>
+                <value>${jdbcPrincipal}</value>
+            </property>
+        </credential>
+	</credentials>
+
+	<start to="fork-node"/>
+
+	<fork name="fork-node">
+		<path start = "d8-contract-header"/>
+		<path start = "d8-contract-line"/>
+		<path start = "d8-contract-revn-dist"/>
+	</fork>
+
+	<action cred="prd-cert" name="d8-contract-header">
+        <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>d8_contract_header_merge</name>
+            <jar>d8_contract_header_merge.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+        <ok to="d8-curr-calc-country"/>
+        <error to="fail"/>
+	</action>
+
+	<action cred="prd-cert" name="d8-contract-line">
+        <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>d8_contract_line_merge</name>
+            <jar>d8_contract_line_merge.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+        <ok to="join-node"/>
+        <error to="fail"/>
+	</action>
+
+	<action cred="prd-cert" name="d8-contract-revn-dist">
+        <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>d8_contract_revn_dist_merge</name>
+            <jar>d8_contract_revn_dist_merge.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+        <ok to="join-node"/>
+        <error to="fail"/>
+	</action>
+
+	<action cred="prd-cert" name="d8-curr-calc-country">
+        <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>d8_curr_calc_country_merge</name>
+            <jar>d8_curr_calc_country_merge.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+        <ok to="join-node"/>
+        <error to="fail"/>
+	</action>
+
+	<action cred="prd-cert" name="d8-contract-dn">
+        <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>d8_contract_dn_merge</name>
+            <jar>d8_contract_dn_merge.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+        <ok to="end"/>
+        <error to="fail"/>
+    </action>
+
+	<join name = "join-node" to = "d8-contract-dn"/>
+	
+	<action name="save_log_file">
+		<shell xmlns="uri:oozie:shell-action:0.2">
+			<job-tracker>${jobTracker}</job-tracker>
+			<name-node>${nameNode}</name-node>
+			<exec>save_log.sh</exec>
+			<file>${saveLogScriptPath}/save_log.sh</file>
+		</shell>
+		<ok to="end"/>
+		<error to="fail"/>
+	</action>
+
+	<kill name="fail">
+        	<message>Error in execution of contract_dn workflow</message>
+	</kill>
+	
+	<end name="end"/>
+	
+</workflow-app>

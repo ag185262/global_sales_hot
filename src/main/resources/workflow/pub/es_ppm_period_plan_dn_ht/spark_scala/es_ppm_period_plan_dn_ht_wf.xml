@@ -1,0 +1,1432 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="es-ppm-period-plan-dn-ht-spark-scala-wf">
+   <global>
+     <job-tracker>${job_tracker}</job-tracker>
+     <name-node>${name_node}</name-node>
+     <configuration>
+       <property>
+         <name>tez.queue.name</name>
+         <value>${queue_name}</value>
+       </property>
+       <property>
+         <name>mapreduce.job.queuename</name>
+         <value>${queue_name}</value>
+       </property>
+     </configuration>
+   </global>
+   <credentials>
+     <credential name="cred" type="hcat">
+       <property>
+         <name>hcat.metastore.principal</name>
+         <value>${metastorePrincipal}</value>
+       </property>
+       <property>
+         <name>hcat.metastore.uri</name>
+         <value>${metaStoreUri}</value>
+       </property>
+     </credential>
+   </credentials>
+   <start to="d8-es-ppm-prod-plan-ht-t1-init-ins" />
+   <action cred="cred" name="d8-es-ppm-prod-plan-ht-t1-init-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-prod-plan-ht-t1-init-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmprodplanhtt1initinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-prod-plan-ht-ld-init-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-prod-plan-ht-ld-init-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-prod-plan-ht-ld-init-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmprodplanhtldinitinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>
+       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01-init-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01-init-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01-init-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01initinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>
+       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02a-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02a-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02a-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>
+       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>
+       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02b-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02b-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02b-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02binsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>
+       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-0" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-0">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-0</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02c-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02c-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02c-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02cinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-1" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-1">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-1</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02d-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02d-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02d-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02dinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-2" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-2">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-2</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02e-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02e-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02e-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02einsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-3" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-3">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-3</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02f-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02f-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02f-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02finsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-4" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-4">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-4</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02g-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02g-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02g-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02ginsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-5" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-5">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-5</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02h-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02h-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02h-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02hinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-6" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-6">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-6</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02i-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02i-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02i-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02iinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-7" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-7">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-7</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02j-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02j-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02j-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02jinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-8" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-8">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-8</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02k-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02k-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02k-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02kinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-9" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-9">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-9</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02l-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02l-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02l-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02linsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-10" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-10">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-10</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02m-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02m-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02m-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02minsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-11" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-11">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-11</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02n-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02n-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02n-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02ninsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-12" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-12">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-12</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02o-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02o-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02o-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02oinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-13" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-13">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-13</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02p-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02p-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02p-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02pinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-14" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-14">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-14</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02q-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02q-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02q-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02qinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-15" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-15">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-15</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02r-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02r-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02r-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02rinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-16" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-16">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-16</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02s-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02s-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02s-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02sinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-17" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-17">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-17</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02t-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02t-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02t-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02tinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-18" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-18">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-18</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02u-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02u-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02u-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02uinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-19" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-19">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-19</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02v-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02v-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02v-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02vinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-20" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-20">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-20</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02w-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02w-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02w-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02winsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-21" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-21">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-21</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02x-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02x-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02x-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02xinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-22" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-22">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-22</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02y-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02y-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02y-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02yinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-23" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-23">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-23</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02z-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02z-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02z-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02zinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-24" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-24">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-24</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02aa-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02aa-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02aa-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02aainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-25" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-25">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-25</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>
+       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02ab-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02ab-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02ab-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02abinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-26" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-26">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-26</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02ac-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02ac-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02ac-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02acinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-27" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-27">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-27</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02ad-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02ad-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02ad-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02adinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-28" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-28">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-28</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02ae-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02ae-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02ae-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02aeinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-29" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-29">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-29</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02af-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02af-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02af-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02afinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-30" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-30">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-30</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02ag-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02ag-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02ag-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02aginsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-31" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-31">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-31</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02ah-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02ah-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02ah-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02ahinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-32" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-32">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-32</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02ai-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02ai-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02ai-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02aiinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-33" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-33">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-33</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02aj-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02aj-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02aj-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02ajinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-34" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-34">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-34</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02ak-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02ak-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02ak-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02akinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-35" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-35">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-35</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02al-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02al-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02al-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02alinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-36" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-36">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-36</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d02am-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d02am-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d02am-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland02aminsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01a-ins-37" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01a-ins-37">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01a-ins-37</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-d01b-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-d01b-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-d01b-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodpland01binsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-dn-ht-ld-1-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-dn-ht-ld-1-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-dn-ht-ld-1-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodplandnhtld1insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-dn-ht-hd-ren" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-dn-ht-hd-ren">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-dn-ht-hd-ren</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodplandnhthdrenRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-period-plan-dn-ht-ld-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-period-plan-dn-ht-ld-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-period-plan-dn-ht-ld-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmperiodplandnhtldinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-prod-plan-ht-ren" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-prod-plan-ht-ren">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-prod-plan-ht-ren</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmprodplanhtrenRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="d8-es-ppm-prod-plan-ht-ld-1-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-ppm-prod-plan-ht-ld-1-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-ppm-prod-plan-ht-ld-1-ins</name>    
+       <class>com.ncr.edl.apollo.es_ppm_period_plan_dn_ht.d8esppmprodplanhtld1insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>       
+     </spark>
+     <ok to="end" />
+     <error to="fail" />
+   </action>
+   <kill name="fail">
+      <message>Error while running workflow es-ppm-period-plan-dn-ht-spark-scala-wf workflow: [${wf:errorMessage(wf:lastErrorNode())}]</message> 
+   </kill>
+   <end name="end" />
+</workflow-app>

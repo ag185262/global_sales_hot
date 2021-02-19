@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="es-customer-loc-set-dn-spark-scala-wf">
+   <global>
+     <job-tracker>${job_tracker}</job-tracker>
+     <name-node>${name_node}</name-node>
+     <configuration>
+       <property>
+         <name>tez.queue.name</name>
+         <value>${queue_name}</value>
+       </property>
+       <property>
+         <name>mapreduce.job.queuename</name>
+         <value>${queue_name}</value>
+       </property>
+     </configuration>
+   </global>
+   <credentials>
+     <credential name="cred" type="hcat">
+       <property>
+         <name>hcat.metastore.principal</name>
+         <value>${metastorePrincipal}</value>
+       </property>
+       <property>
+         <name>hcat.metastore.uri</name>
+         <value>${metaStoreUri}</value>
+       </property>
+     </credential>
+   </credentials>
+   <start to="fork_node_0" />
+   <fork name="fork_node_0">
+     <path start="d8-es-customer-loc-set-t1-1-ins" />
+     <path start="d8-es-customer-loc-set-t2-ins" />
+   </fork>
+   <action cred="cred" name="d8-es-customer-loc-set-t1-1-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-customer-loc-set-t1-1-ins</name>    
+       <class>com.ncr.edl.apollo.es_customer_loc_set_dn.d8escustomerlocsett11insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-es-customer-loc-set-t1a-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-customer-loc-set-t1a-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-customer-loc-set-t1a-ins</name>    
+       <class>com.ncr.edl.apollo.es_customer_loc_set_dn.d8escustomerlocsett1ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-es-customer-loc-set-t1-2-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-customer-loc-set-t1-2-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-customer-loc-set-t1-2-ins</name>    
+       <class>com.ncr.edl.apollo.es_customer_loc_set_dn.d8escustomerlocsett12insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="join_node_0" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-customer-loc-set-t2-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-customer-loc-set-t2-ins</name>    
+       <class>com.ncr.edl.apollo.es_customer_loc_set_dn.d8escustomerlocsett2insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-es-customer-loc-set-t3a-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-customer-loc-set-t3a-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-customer-loc-set-t3a-ins</name>    
+       <class>com.ncr.edl.apollo.es_customer_loc_set_dn.d8escustomerlocsett3ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-es-customer-loc-set-t3b-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-customer-loc-set-t3b-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-customer-loc-set-t3b-ins</name>    
+       <class>com.ncr.edl.apollo.es_customer_loc_set_dn.d8escustomerlocsett3binsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-es-customer-loc-set-t3c-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-customer-loc-set-t3c-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-customer-loc-set-t3c-ins</name>    
+       <class>com.ncr.edl.apollo.es_customer_loc_set_dn.d8escustomerlocsett3cinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-es-customer-loc-set-t3d-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-customer-loc-set-t3d-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-customer-loc-set-t3d-ins</name>    
+       <class>com.ncr.edl.apollo.es_customer_loc_set_dn.d8escustomerlocsett3dinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-es-customer-loc-set-t3-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-customer-loc-set-t3-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-customer-loc-set-t3-ins</name>    
+       <class>com.ncr.edl.apollo.es_customer_loc_set_dn.d8escustomerlocsett3insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-es-customer-loc-set-t4a-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-customer-loc-set-t4a-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-customer-loc-set-t4a-ins</name>    
+       <class>com.ncr.edl.apollo.es_customer_loc_set_dn.d8escustomerlocsett4ainsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-es-customer-loc-set-t4b-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-customer-loc-set-t4b-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-customer-loc-set-t4b-ins</name>    
+       <class>com.ncr.edl.apollo.es_customer_loc_set_dn.d8escustomerlocsett4binsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="join_node_0" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-customer-loc-set-t4-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-customer-loc-set-t4-ins</name>    
+       <class>com.ncr.edl.apollo.es_customer_loc_set_dn.d8escustomerlocsett4insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-es-customer-loc-set-dn-ld-1-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-customer-loc-set-dn-ld-1-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-customer-loc-set-dn-ld-1-ins</name>    
+       <class>com.ncr.edl.apollo.es_customer_loc_set_dn.d8escustomerlocsetdnld1insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-es-customer-loc-set-dn-ren" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-customer-loc-set-dn-ren">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-customer-loc-set-dn-ren</name>    
+       <class>com.ncr.edl.apollo.es_customer_loc_set_dn.d8escustomerlocsetdnrenRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-es-customer-loc-set-dn-ld-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-customer-loc-set-dn-ld-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-customer-loc-set-dn-ld-ins</name>    
+       <class>com.ncr.edl.apollo.es_customer_loc_set_dn.d8escustomerlocsetdnldinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="end" />
+     <error to="fail" />
+   </action>
+   <join name="join_node_0" to="d8-es-customer-loc-set-t4-ins" />
+   <kill name="fail">
+      <message>Error while running workflow es-customer-loc-set-dn-spark-scala-wf workflow: [${wf:errorMessage(wf:lastErrorNode())}]</message>
+   </kill>
+   <end name="end" />
+</workflow-app>

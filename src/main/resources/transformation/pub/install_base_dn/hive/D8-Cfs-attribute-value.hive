@@ -1,0 +1,2 @@
+!run ./hive_init.hql
+!run ./D8_Cfs_attribute_value_merged.hql

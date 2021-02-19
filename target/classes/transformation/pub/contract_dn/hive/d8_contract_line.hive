@@ -1,0 +1,2 @@
+!run ./hive_init.hql
+!run ./d8_contract_line_merge.hql

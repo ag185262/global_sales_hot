@@ -1,0 +1,1691 @@
+<workflow-app xmlns="uri:oozie:workflow:0.5" name="d8_trans2pub_sqoop_tables">
+    <global>
+        <job-tracker>${jobTracker}</job-tracker>
+        <name-node>${nameNode}</name-node>
+    </global>
+    <credentials>
+        <credential name="trans2pub" type="hive2">
+            <property>
+                <name>hive2.jdbc.url</name>
+                <value>${jdbcUrl}</value>
+            </property>
+            <property>
+                <name>hive2.server.principal</name>
+                <value>${jdbcPrincipal}</value>
+            </property>
+        </credential>
+    </credentials>
+
+    <start to="fork1"/>
+
+    <fork name="fork1">
+        <path start="trans2pub_d8_invoice_line"/>
+        <path start="trans2pub_d8_customer_invoice"/>
+        <path start="trans2pub_d8_tax_exemption"/>
+        <path start="trans2pub_d8_invoice_rule"/>
+        <path start="trans2pub_d8_ar_vat_tax"/>
+        <path start="trans2pub_d8_renewal_type"/>
+        <path start="trans2pub_d8_cust_acct_site_use_dn"/>
+        <path start="trans2pub_d8_customer_dn"/>
+        <path start="trans2pub_d8_party"/>
+        <path start="trans2pub_d8_cust_account_site"/>
+        <path start="trans2pub_d8_party_site_ld"/>
+        <path start="trans2pub_d8_customer_account"/>
+        <path start="trans2pub_d8_product_price"/>
+        <path start="trans2pub_d8_product"/>
+        <path start="trans2pub_d8_product_language"/>
+        <path start="trans2pub_d8_product_order_org"/>
+        <path start="trans2pub_d8_sales_order_sys_parm"/>
+        <path start="trans2pub_d8_sales_order"/>
+        <path start="trans2pub_d8_sales_order_line"/>
+        <path start="trans2pub_d8_edw_custom_lookup"/>
+        <path start="trans2pub_d8_curr_calc"/>
+        <path start="trans2pub_d8_calendar_dates"/>
+        <path start="trans2pub_d8_mtl_item_category"/>
+        <path start="trans2pub_d8_mtl_item_category_xref"/>
+        <path start="trans2pub_d8_invtry_organization"/>
+        <path start="trans2pub_d8_invtry_item"/>
+        <path start="trans2pub_d8_invtry_mtl_parameter"/>
+        <path start="trans2pub_d8_branch_country_area_xref"/>
+        <path start="trans2pub_d8_currency_xref"/>
+        <path start="trans2pub_d8_country_instance_xref"/>
+        <path start="trans2pub_d8_product_type"/>
+        <path start="trans2pub_d8_wcs_country_area"/>
+        <path start="trans2pub_d8_cust_industry_supp"/>
+        <path start="trans2pub_d8_parent_cust_industry"/>
+        <path start="trans2pub_d8_ncr_organization"/>
+        <path start="trans2pub_d8_naics_dn"/>
+        <path start="trans2pub_d8_customer_industry"/>
+        <path start="trans2pub_d8_cust_acct_naics_xref"/>
+        <path start="trans2pub_d8_translation_rates"/>
+        <path start="trans2pub_d8_gl_code_combinations"/>
+        <path start="trans2pub_d8_party_site"/>
+        <path start="trans2pub_d8_invoice_term"/>
+        <path start="trans2pub_d8_cust_account_site_unc"/>
+        <path start="trans2pub_d8_line_renewal_type"/>
+        <path start="trans2pub_d8_party_site_address"/>
+        <path start="trans2pub_d8_party_site_address_unc"/>
+        <path start="trans2pub_d8_party_site_unc"/>
+        <path start="trans2pub_d8_party_unc"/>
+        <path start="trans2pub_d8_renewal_pricing_type"/>
+        <path start="trans2pub_d8_scored_renewal12"/>
+        <path start="trans2pub_d8_dim_cust_site_mdm"/>
+        <path start="trans2pub_d8_offer_portfolio"/>
+        <path start="trans2pub_d8_product_dn"/>
+		<path start="trans2pub_d8_es_country_default_mig"/>
+        <path start="trans2pub_d8_entrprs_cust_link_dn_ld"/>
+        <path start="trans2pub_d8_svc_offer_cat_xref"/>
+        <path start="trans2pub_d8_solution_dn"/>
+        <path start="trans2pub_d8_adv_solution_rule"/>
+        <path start="trans2pub_d8_walmart_xref"/>
+        <path start="trans2pub_d8_service_offer_category"/>
+        <path start="trans2pub_d8_svc_adv_solution_xref"/>
+        <path start="trans2pub_d8_spt_coverage"/>
+        <path start="trans2pub_d8_product_adv_solution"/>
+        <path start="trans2pub_d8_contact_point"/>
+        <path start="trans2pub_d8_cust_account_role"/>
+        <path start="trans2pub_d8_cust_acct_site_use_unc_dn"/>
+        <path start="trans2pub_d8_es_group"/>
+        <path start="trans2pub_d8_es_cust_request"/>
+        <path start="trans2pub_d8_es_country_default"/>
+        <path start="trans2pub_d8_geo_rollup_xref"/>
+        <path start="trans2pub_d8_accounting_period_name"/>
+        <path start="trans2pub_d8_corporate_product_line"/>
+        <path start="trans2pub_d8_dim_customer_mdm"/>
+        <path start="trans2pub_d8_erp_operating_unit"/>
+        <path start="trans2pub_d8_fml_product_service_xref"/>
+        <path start="trans2pub_d8_product_group"/>
+        <path start="trans2pub_d8_cs_customer"/>
+        <path start="trans2pub_d8_customer"/>
+        <path start="trans2pub_d8_pa_global_order_svc_status_vw"/>
+        <path start="trans2pub_d8_fnd_user"/>
+    </fork>
+
+
+	  <action cred="trans2pub" name="trans2pub_d8_entrprs_cust_link_dn_ld">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_entrprs_cust_link_dn_ld</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_entrprs_cust_link_dn_ld</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.entrprs_cust_link_dn_ld.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+   <action cred="trans2pub" name="trans2pub_d8_es_country_default_mig">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_es_country_default_mig</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_es_country_default_mig</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.es_country_default_mig.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_invoice_line">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_invoice_line</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_invoice_line</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.invoice_line.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+            <param>containerSize=${invoice_line_containerSize}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_customer_invoice">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_customer_invoice</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_customer_invoice</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.customer_invoice.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+            <param>containerSize=${customer_invoice_containerSize}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_tax_exemption">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_tax_exemption</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_tax_exemption</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.tax_exemption.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_invoice_rule">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_invoice_rule</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_invoice_rule</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.invoice_rule.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_ar_vat_tax">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_ar_vat_tax</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_ar_vat_tax</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.ar_vat_tax.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_renewal_type">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_renewal_type</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_renewal_type</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.renewal_type.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+
+    <action cred="trans2pub" name="trans2pub_d8_cust_acct_site_use_dn">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_cust_acct_site_use_dn</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_cust_acct_site_use_dn</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.cust_acct_site_use_dn.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+            <param>containerSize=${cust_acct_site_use_dn_containerSize}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+
+    <action cred="trans2pub" name="trans2pub_d8_customer_dn">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_customer_dn</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_customer_dn</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.customer_dn.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_party">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_party</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_party</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.party.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_cust_account_site">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_cust_account_site</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_cust_account_site</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.cust_account_site.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_party_site_ld">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_party_site_ld</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_party_site_ld</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.party_site_ld.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_customer_account">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_customer_account</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_customer_account</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.customer_account.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_product_price">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_product_price</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_product_price</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.product_price.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+            <param>containerSize=${product_price_containerSize}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_product">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_product</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_product</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.product.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_product_language">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_product_language</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_product_language</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.product_language.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_product_order_org">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_product_order_org</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_product_order_org</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.product_order_org.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_sales_order_sys_parm">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_sales_order_sys_parm</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_sales_order_sys_parm</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.sales_order_sys_parm.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_sales_order">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_sales_order</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_sales_order</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.sales_order.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_sales_order_line">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_sales_order_line</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_sales_order_line</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.sales_order_line.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+            <param>containerSize=${sales_order_line_containerSize}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_edw_custom_lookup">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_edw_custom_lookup</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_edw_custom_lookup</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.edw_custom_lookup.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_curr_calc">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_curr_calc</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_curr_calc</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.curr_calc.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_calendar_dates">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_calendar_dates</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_calendar_dates</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.calendar_dates.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_mtl_item_category">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_mtl_item_category</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_mtl_item_category</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.mtl_item_category.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_mtl_item_category_xref">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_mtl_item_category_xref</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_mtl_item_category_xref</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.mtl_item_category_xref.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+            <param>containerSize=${mtl_item_category_xref_containerSize}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_invtry_organization">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_invtry_organization</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_invtry_organization</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.invtry_organization.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_invtry_item">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_invtry_item</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_invtry_item</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.invtry_item.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+            <param>containerSize=${invtry_item_containerSize}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_invtry_mtl_parameter">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_invtry_mtl_parameter</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_invtry_mtl_parameter</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.invtry_mtl_parameter.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_branch_country_area_xref">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_branch_country_area_xref</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_branch_country_area_xref</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.branch_country_area_xref.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_currency_xref">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_currency_xref</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_currency_xref</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.currency_xref.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_country_instance_xref">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_country_instance_xref</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_country_instance_xref</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.country_instance_xref.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_product_type">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_product_type</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_product_type</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.product_type.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_wcs_country_area">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_wcs_country_area</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_wcs_country_area</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.wcs_country_area.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_cust_industry_supp">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_cust_industry_supp</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_cust_industry_supp</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.cust_industry_supp.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_parent_cust_industry">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_parent_cust_industry</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_parent_cust_industry</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.parent_cust_industry.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_ncr_organization">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_ncr_organization</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_ncr_organization</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.ncr_organization.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_naics_dn">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_naics_dn</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_naics_dn</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.naics_dn.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action cred="trans2pub" name="trans2pub_d8_customer_industry">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_customer_industry</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_customer_industry</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.customer_industry.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_cust_acct_naics_xref">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_cust_acct_naics_xref</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_cust_acct_naics_xref</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.cust_acct_naics_xref.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_translation_rates">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_translation_rates</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_translation_rates</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.translation_rates.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_gl_code_combinations">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_gl_code_combinations</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_gl_code_combinations</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.gl_code_combinations.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_party_site">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_party_site</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_party_site</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.party_site.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_invoice_term">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_invoice_term</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_invoice_term</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.invoice_term.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_cust_account_site_unc">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_cust_account_site_unc</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_cust_account_site_unc</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.cust_account_site_unc.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+            <param>containerSize=${cust_account_site_unc_containerSize}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_line_renewal_type">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_line_renewal_type</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_line_renewal_type</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.line_renewal_type.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_party_site_address">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_party_site_address</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_party_site_address</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.party_site_address.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+            <param>containerSize=${party_site_address_containerSize}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_party_site_address_unc">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_party_site_address_unc</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_party_site_address_unc</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.party_site_address_unc.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+            <param>containerSize=${party_site_address_unc_containerSize}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_party_site_unc">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_party_site_unc</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_party_site_unc</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.party_site_unc.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+            <param>containerSize=${party_site_unc_containerSize}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_party_unc">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_party_unc</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_party_unc</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.party_unc.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+            <param>containerSize=${party_unc_containerSize}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_renewal_pricing_type">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_renewal_pricing_type</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_renewal_pricing_type</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.renewal_pricing_type.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_scored_renewal12">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_scored_renewal12</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_scored_renewal12</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.scored_renewal12.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_dim_cust_site_mdm">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_dim_cust_site_mdm</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_dim_cust_site_mdm</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.dim_cust_site_mdm.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+            <param>containerSize=${dim_cust_site_mdm_containerSize}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>    <action cred="trans2pub" name="trans2pub_d8_offer_portfolio">
+    <hive2 xmlns="uri:oozie:hive2-action:0.2">
+        <configuration>
+            <property>
+                <name>hive.query.name</name>
+                <value>${edlRunId}_trans2pub_d8_offer_portfolio</value>
+            </property>
+            <property>
+                <name>mapred.job.name</name>
+                <value>${edlRunId}_trans2pub_d8_offer_portfolio</value>
+            </property>
+        </configuration>
+        <jdbc-url>${jdbcUrl}</jdbc-url>
+        <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.offer_portfolio.hql</script>
+        <param>targetSchema=${targetSchema}</param>
+    </hive2>
+    <ok to="join1"/>
+    <error to="Email-On-Fail"/>
+</action>
+
+    <action cred="trans2pub" name="trans2pub_d8_product_dn">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_product_dn</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_product_dn</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.product_dn.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_svc_offer_cat_xref">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_svc_offer_cat_xref</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_svc_offer_cat_xref</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.svc_offer_cat_xref.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_solution_dn">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_solution_dn</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_solution_dn</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.solution_dn.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_adv_solution_rule">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_adv_solution_rule</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_adv_solution_rule</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.adv_solution_rule.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_walmart_xref">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_walmart_xref</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_walmart_xref</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.walmart_xref.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_service_offer_category">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_service_offer_category</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_service_offer_category</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.service_offer_category.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_svc_adv_solution_xref">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_svc_adv_solution_xref</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_svc_adv_solution_xref</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.svc_adv_solution_xref.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_spt_coverage">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_spt_coverage</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_spt_coverage</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.spt_coverage.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_product_adv_solution">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_product_adv_solution</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_product_adv_solution</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.product_adv_solution.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_contact_point">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_contact_point</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_contact_point</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.contact_point.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_cust_account_role">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_cust_account_role</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_cust_account_role</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.cust_account_role.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_cust_acct_site_use_unc_dn">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_cust_acct_site_use_unc_dn</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_cust_acct_site_use_unc_dn</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.cust_acct_site_use_unc_dn.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_es_group">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_es_group</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_es_group</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.es_group.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_es_cust_request">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_es_cust_request</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_es_cust_request</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.es_cust_request.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_es_country_default">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_es_country_default</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_es_country_default</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.es_country_default.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_geo_rollup_xref">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_geo_rollup_xref</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_geo_rollup_xref</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.geo_rollup_xref.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_accounting_period_name">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_accounting_period_name</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_accounting_period_name</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.accounting_period_name.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_corporate_product_line">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_corporate_product_line</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_corporate_product_line</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.corporate_product_line.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_dim_customer_mdm">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_dim_customer_mdm</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_dim_customer_mdm</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.dim_customer_mdm.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+            <param>containerSize=${dim_customer_mdm_containerSize}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_erp_operating_unit">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_erp_operating_unit</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_erp_operating_unit</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.erp_operating_unit.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_fml_product_service_xref">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_fml_product_service_xref</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_fml_product_service_xref</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.fml_product_service_xref.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_product_group">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_product_group</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_product_group</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.product_group.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_cs_customer">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_cs_customer</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_cs_customer</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.cs_customer.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_customer">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_customer</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_customer</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.customer.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_pa_global_order_svc_status_vw">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_pa_global_order_svc_status_vw</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_pa_global_order_svc_status_vw</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.pa_global_order_svc_status_vw.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <action cred="trans2pub" name="trans2pub_d8_fnd_user">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <configuration>
+                <property>
+                    <name>hive.query.name</name>
+                    <value>${edlRunId}_trans2pub_d8_fnd_user</value>
+                </property>
+                <property>
+                    <name>mapred.job.name</name>
+                    <value>${edlRunId}_trans2pub_d8_fnd_user</value>
+                </property>
+            </configuration>
+            <jdbc-url>${jdbcUrl}</jdbc-url>
+            <script>${codeBaseDir}/transformation/pub/trans2pub/pub_d8.fnd_user.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+        </hive2>
+        <ok to="join1"/>
+        <error to="Email-On-Fail"/>
+    </action>
+    <join name="join1" to="end"/>
+
+    <action name="Email-On-Fail">
+        <email xmlns="uri:oozie:email-action:0.2">
+            <to>js185363@ncr.com,bk250071@ncr.com,EQ230008@ncr.com</to>
+            <subject>Failure in Oozie Workflow: d8_trans2pub_sqoop_tables </subject>
+            <body>${nameNode} : ${wf:id()} : edlIngestStartTime=${edlIngestStartTime} : edlIngestEndTime=${edlIngestEndTime} : Workflow Action Failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</body>
+        </email>
+        <ok to="failed"/>
+        <error to="failed"/>
+    </action>
+    <kill name="failed">
+        <message>Action Failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+    </kill>
+    <end name="end"/>
+</workflow-app>

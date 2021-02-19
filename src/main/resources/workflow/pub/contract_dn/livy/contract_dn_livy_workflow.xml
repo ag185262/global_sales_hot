@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="contract-dn-wf">
+	<global>
+		<job-tracker>${jobTracker}</job-tracker>
+	    	<name-node>${nameNode}</name-node>
+	    	<configuration>
+	      	<property>
+	        	<name>tez.queue.name</name>
+        		<value>${queueName}</value>
+	      	</property>
+	      	<property>
+	        	<name>mapreduce.job.queuename</name>
+        		<value>${queueName}</value>
+	      	</property>
+	    	</configuration>
+	</global>
+
+	<credentials>
+		<credential name="prd_cert" type="hive2">
+        	    <property>
+	                <name>hive2.jdbc.url</name>
+                	<value>${jdbcURL}</value>
+        	    </property>
+	            <property>
+                	<name>hive2.server.principal</name>
+        	        <value>${jdbcPrincipal}</value>
+	            </property>
+        	</credential>
+	</credentials>
+
+	<start to="flow-01"/>
+
+	<fork name="fork-node">
+		<path start = "flow-02"/>
+		<path start = "flow-03"/>
+		<path start = "flow-04"/>
+		<path start = "flow-05"/>
+		<path start = "flow-06"/>
+		<path start = "flow-07"/>
+		<path start = "flow-08"/>
+		<path start = "flow-09"/>
+		<path start = "flow-10"/>
+	</fork>
+
+	<action name="flow-01">
+		<shell xmlns="uri:oozie:shell-action:0.2">
+			<job-tracker>${jobTracker}</job-tracker>
+			<name-node>${nameNode}</name-node>
+			<exec>execute_livy.sh</exec>
+			<argument>${user}</argument>
+			<argument>${livy_host}</argument>
+			<argument>${livy_port}</argument>
+			<argument>${livy_exe_path}/livy/flow-01/</argument>
+			<argument>${livy_exe_path}/livy/flow-01/flow-01.lst</argument>
+			<argument>${livy_exe_path}/livy/flow-01/spark_driver_flow_01.py</argument>
+			<argument>${execution_engine}</argument>
+			<file>${livy_exe_path}/execute_livy.sh</file>
+		</shell>
+		<ok to="fork-node"/>
+		<error to="fail"/>
+	</action>
+
+	<action name="flow-02">
+        <shell xmlns="uri:oozie:shell-action:0.2">
+			<job-tracker>${jobTracker}</job-tracker>
+			<name-node>${nameNode}</name-node>
+			<exec>execute_livy.sh</exec>
+			<argument>${user}</argument>
+			<argument>${livy_host}</argument>
+			<argument>${livy_port}</argument>
+			<argument>${livy_exe_path}/livy/flow-02/</argument>
+			<argument>${livy_exe_path}/livy/flow-02/flow-02.lst</argument>
+			<argument>${livy_exe_path}/livy/flow-02/spark_driver_flow_02.py</argument>
+			<argument>${execution_engine}</argument>
+			<file>${livy_exe_path}/execute_livy.sh</file>
+		</shell>
+        <ok to="flow-11"/>
+        <error to="fail"/>
+	</action>
+
+	<action name="flow-03">
+        <shell xmlns="uri:oozie:shell-action:0.2">
+			<job-tracker>${jobTracker}</job-tracker>
+			<name-node>${nameNode}</name-node>
+			<exec>execute_livy.sh</exec>
+			<argument>${user}</argument>
+			<argument>${livy_host}</argument>
+			<argument>${livy_port}</argument>
+			<argument>${livy_exe_path}/livy/flow-03/</argument>
+			<argument>${livy_exe_path}/livy/flow-03/flow-03.lst</argument>
+			<argument>${livy_exe_path}/livy/flow-03/spark_driver_flow_03.py</argument>
+			<argument>${execution_engine}</argument>
+			<file>${livy_exe_path}/execute_livy.sh</file>
+		</shell>
+        <ok to="join_node"/>
+        <error to="fail"/>
+	</action>
+
+	<action name="flow-04">
+        <shell xmlns="uri:oozie:shell-action:0.2">
+			<job-tracker>${jobTracker}</job-tracker>
+			<name-node>${nameNode}</name-node>
+			<exec>execute_livy.sh</exec>
+			<argument>${user}</argument>
+			<argument>${livy_host}</argument>
+			<argument>${livy_port}</argument>
+			<argument>${livy_exe_path}/livy/flow-04/</argument>
+			<argument>${livy_exe_path}/livy/flow-04/flow-04.lst</argument>
+			<argument>${livy_exe_path}/livy/flow-04/spark_driver_flow_04.py</argument>
+			<argument>${execution_engine}</argument>
+			<file>${livy_exe_path}/execute_livy.sh</file>
+		</shell>
+        <ok to="join_node"/>
+        <error to="fail"/>
+	</action>
+
+	<action name="flow-05">
+        <shell xmlns="uri:oozie:shell-action:0.2">
+			<job-tracker>${jobTracker}</job-tracker>
+			<name-node>${nameNode}</name-node>
+			<exec>execute_livy.sh</exec>
+			<argument>${user}</argument>
+			<argument>${livy_host}</argument>
+			<argument>${livy_port}</argument>
+			<argument>${livy_exe_path}/livy/flow-05/</argument>
+			<argument>${livy_exe_path}/livy/flow-05/flow-05.lst</argument>
+			<argument>${livy_exe_path}/livy/flow-05/spark_driver_flow_05.py</argument>
+			<argument>${execution_engine}</argument>
+			<file>${livy_exe_path}/execute_livy.sh</file>
+		</shell>
+        <ok to="join_node"/>
+        <error to="fail"/>
+	</action>
+
+	<action name="flow-06">
+        <shell xmlns="uri:oozie:shell-action:0.2">
+			<job-tracker>${jobTracker}</job-tracker>
+			<name-node>${nameNode}</name-node>
+			<exec>execute_livy.sh</exec>
+			<argument>${user}</argument>
+			<argument>${livy_host}</argument>
+			<argument>${livy_port}</argument>
+			<argument>${livy_exe_path}/livy/flow-06/</argument>
+			<argument>${livy_exe_path}/livy/flow-06/flow-06.lst</argument>
+			<argument>${livy_exe_path}/livy/flow-06/spark_driver_flow_06.py</argument>
+			<argument>${execution_engine}</argument>
+			<file>${livy_exe_path}/execute_livy.sh</file>
+		</shell>
+        <ok to="join_node"/>
+        <error to="fail"/>
+	</action>
+
+	<action name="flow-07">
+        <shell xmlns="uri:oozie:shell-action:0.2">
+			<job-tracker>${jobTracker}</job-tracker>
+			<name-node>${nameNode}</name-node>
+			<exec>execute_livy.sh</exec>
+			<argument>${user}</argument>
+			<argument>${livy_host}</argument>
+			<argument>${livy_port}</argument>
+			<argument>${livy_exe_path}/livy/flow-07/</argument>
+			<argument>${livy_exe_path}/livy/flow-07/flow-07.lst</argument>
+			<argument>${livy_exe_path}/livy/flow-07/spark_driver_flow_07.py</argument>
+			<argument>${execution_engine}</argument>
+			<file>${livy_exe_path}/execute_livy.sh</file>
+		</shell>
+        <ok to="join_node"/>
+        <error to="fail"/>
+	</action>
+
+	<action name="flow-08">
+        <shell xmlns="uri:oozie:shell-action:0.2">
+			<job-tracker>${jobTracker}</job-tracker>
+			<name-node>${nameNode}</name-node>
+			<exec>execute_livy.sh</exec>
+			<argument>${user}</argument>
+			<argument>${livy_host}</argument>
+			<argument>${livy_port}</argument>
+			<argument>${livy_exe_path}/livy/flow-08/</argument>
+			<argument>${livy_exe_path}/livy/flow-08/flow-08.lst</argument>
+			<argument>${livy_exe_path}/livy/flow-08/spark_driver_flow_08.py</argument>
+			<argument>${execution_engine}</argument>
+			<file>${livy_exe_path}/execute_livy.sh</file>
+		</shell>
+        <ok to="flow-13"/>
+        <error to="fail"/>
+	</action>
+
+	<action name="flow-09">
+        <shell xmlns="uri:oozie:shell-action:0.2">
+			<job-tracker>${jobTracker}</job-tracker>
+			<name-node>${nameNode}</name-node>
+			<exec>execute_livy.sh</exec>
+			<argument>${user}</argument>
+			<argument>${livy_host}</argument>
+			<argument>${livy_port}</argument>
+			<argument>${livy_exe_path}/livy/flow-09/</argument>
+			<argument>${livy_exe_path}/livy/flow-09/flow-09.lst</argument>
+			<argument>${livy_exe_path}/livy/flow-09/spark_driver_flow_09.py</argument>
+			<argument>${execution_engine}</argument>
+			<file>${livy_exe_path}/execute_livy.sh</file>
+		</shell>
+        <ok to="join_node"/>
+        <error to="fail"/>
+	</action>
+
+	<action name="flow-10">
+        <shell xmlns="uri:oozie:shell-action:0.2">
+			<job-tracker>${jobTracker}</job-tracker>
+			<name-node>${nameNode}</name-node>
+			<exec>execute_livy.sh</exec>
+			<argument>${user}</argument>
+			<argument>${livy_host}</argument>
+			<argument>${livy_port}</argument>
+			<argument>${livy_exe_path}/livy/flow-10/</argument>
+			<argument>${livy_exe_path}/livy/flow-10/flow-10.lst</argument>
+			<argument>${livy_exe_path}/livy/flow-10/spark_driver_flow_10.py</argument>
+			<argument>${execution_engine}</argument>
+			<file>${livy_exe_path}/execute_livy.sh</file>
+		</shell>
+        <ok to="flow-12"/>
+        <error to="fail"/>
+	</action>
+
+	<action name="flow-11">
+        <shell xmlns="uri:oozie:shell-action:0.2">
+			<job-tracker>${jobTracker}</job-tracker>
+			<name-node>${nameNode}</name-node>
+			<exec>execute_livy.sh</exec>
+			<argument>${user}</argument>
+			<argument>${livy_host}</argument>
+			<argument>${livy_port}</argument>
+			<argument>${livy_exe_path}/livy/flow-11/</argument>
+			<argument>${livy_exe_path}/livy/flow-11/flow-11.lst</argument>
+			<argument>${livy_exe_path}/livy/flow-11/spark_driver_flow_11.py</argument>
+			<argument>${execution_engine}</argument>
+			<file>${livy_exe_path}/execute_livy.sh</file>
+		</shell>
+        <ok to="join_node"/>
+        <error to="fail"/>
+	</action>
+
+	<action name="flow-12">
+        <shell xmlns="uri:oozie:shell-action:0.2">
+			<job-tracker>${jobTracker}</job-tracker>
+			<name-node>${nameNode}</name-node>
+			<exec>execute_livy.sh</exec>
+			<argument>${user}</argument>
+			<argument>${livy_host}</argument>
+			<argument>${livy_port}</argument>
+			<argument>${livy_exe_path}/livy/flow-12/</argument>
+			<argument>${livy_exe_path}/livy/flow-12/flow-12.lst</argument>
+			<argument>${livy_exe_path}/livy/flow-12/spark_driver_flow_12.py</argument>
+			<argument>${execution_engine}</argument>
+			<file>${livy_exe_path}/execute_livy.sh</file>
+		</shell>
+        <ok to="join_node"/>
+        <error to="fail"/>
+	</action>
+
+	<action name="flow-13">
+        <shell xmlns="uri:oozie:shell-action:0.2">
+			<job-tracker>${jobTracker}</job-tracker>
+			<name-node>${nameNode}</name-node>
+			<exec>execute_livy.sh</exec>
+			<argument>${user}</argument>
+			<argument>${livy_host}</argument>
+			<argument>${livy_port}</argument>
+			<argument>${livy_exe_path}/livy/flow-13/</argument>
+			<argument>${livy_exe_path}/livy/flow-13/flow-13.lst</argument>
+			<argument>${livy_exe_path}/livy/flow-13/spark_driver_flow_13.py</argument>
+			<argument>${execution_engine}</argument>
+			<file>${livy_exe_path}/execute_livy.sh</file>
+		</shell>
+        <ok to="join_node"/>
+        <error to="fail"/>
+	</action>
+
+	<action name="flow-14">
+        <shell xmlns="uri:oozie:shell-action:0.2">
+			<job-tracker>${jobTracker}</job-tracker>
+			<name-node>${nameNode}</name-node>
+			<exec>execute_livy.sh</exec>
+			<argument>${user}</argument>
+			<argument>${livy_host}</argument>
+			<argument>${livy_port}</argument>
+			<argument>${livy_exe_path}/livy/flow-14/</argument>
+			<argument>${livy_exe_path}/livy/flow-14/flow-14.lst</argument>
+			<argument>${livy_exe_path}/livy/flow-14/spark_driver_flow_14.py</argument>
+			<argument>${execution_engine}</argument>
+			<file>${livy_exe_path}/execute_livy.sh</file>
+		</shell>
+        <ok to="flow-15"/>
+        <error to="fail"/>
+	</action>
+
+	<action name="flow-15">
+        <shell xmlns="uri:oozie:shell-action:0.2">
+			<job-tracker>${jobTracker}</job-tracker>
+			<name-node>${nameNode}</name-node>
+			<exec>execute_livy.sh</exec>
+			<argument>${user}</argument>
+			<argument>${livy_host}</argument>
+			<argument>${livy_port}</argument>
+			<argument>${livy_exe_path}/livy/flow-15/</argument>
+			<argument>${livy_exe_path}/livy/flow-15/flow-15.lst</argument>
+			<argument>${livy_exe_path}/livy/flow-15/spark_driver_flow_15.py</argument>
+			<argument>${execution_engine}</argument>
+			<file>${livy_exe_path}/execute_livy.sh</file>
+		</shell>
+        <ok to="end"/>
+        <error to="fail"/>
+    </action>
+
+	<join name = "join_node" to = "flow-14"/>
+	
+	<kill name="fail">
+        	<message>Error in execution of contract_dn workflow</message>
+	</kill>
+	
+	<end name="end"/>
+	
+</workflow-app>

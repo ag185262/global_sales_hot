@@ -1,0 +1,306 @@
+----------------------------------------------------------------------------------------
+--THIS FILE IS CREATED AUTOMATICALLY USING Workload Transformation @ 2019/12/18 11:40:25 
+--Script Name: d8_install_base_dn_24b.ins.sql
+--Inputs:  
+--Outputs:
+
+--Modification History:
+--Date:     Current Date     Who:    
+--Control:              
+--Description:
+----------------------------------------------------------------------------------------
+
+
+--Original Query:
+  ----DATABASE ${TTMMPPDDBB}
+
+--Translated Query: SUCCESS
+
+    use ${TTMMPPDDBB};
+
+--Original Query:
+  ----COLLECT STATISTICS ON ${AAPPLLIIDD1EENNVV}_install_base_dn_t23 COLUMN gsdb_org_code
+
+--Translated Query: SUCCESS
+
+    ANALYZE TABLE ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t23 COMPUTE STATISTICS  FOR COLUMNS gsdb_org_code;
+
+--Original Query:
+  ----COLLECT STATISTICS ON ${AAPPLLIIDD1EENNVV}_install_base_dn_t23 COLUMN dflt_service_product_id
+
+--Translated Query: SUCCESS
+
+    ANALYZE TABLE ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t23 COMPUTE STATISTICS  FOR COLUMNS dflt_service_product_id;
+
+--Original Query:
+  ----COLLECT STATISTICS ON ${AAPPLLIIDD1EENNVV}_install_base_dn_t24a COLUMN gsdb_org_code
+
+--Translated Query: SUCCESS
+
+    ANALYZE TABLE ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t24a COMPUTE STATISTICS  FOR COLUMNS gsdb_org_code;
+
+--Original Query:
+  ----COLLECT STATISTICS ON ${AAPPLLIIDD1EENNVV}_install_base_dn_t24a COLUMN product_id
+
+--Translated Query: SUCCESS
+
+    ANALYZE TABLE ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t24a COMPUTE STATISTICS  FOR COLUMNS product_id;
+
+--Original Query:
+  ----DELETE FROM ${AAPPLLIIDD1EENNVV}_install_base_dn_t24b ALL
+
+--Translated Query: SUCCESS
+
+    TRUNCATE TABLE   ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t24b;
+
+--Original Query:
+  ----LOCK TABLE  ${AAPPLLIIDD1EENNVV}_install_base_dn_t23 FOR ACCESS LOCK TABLE  ${AAPPLLIIDD1EENNVV}_install_base_dn_t24a FOR ACCESSINSERT INTO ${AAPPLLIIDD1EENNVV}_install_base_dn_t24b(      instance_id     ,item_instance_id     ,active_end_date     ,active_start_date     ,actual_return_date     ,actual_ship_date     ,area_code     ,area_desc     ,bill_to_site_use_id     ,bom_enabled_flag     ,country_code     ,country_desc     ,crnt_loc_cs_fml_org_code     ,customer_po_date     ,customer_po_nbr     ,dflt_service_coverage_code     ,dflt_service_duration     ,dflt_service_duration_cnt     ,dflt_service_product_id     ,dflt_wrnty_coverage_code     ,dflt_wrnty_product_desc     ,dflt_wrnty_product_id     ,dflt_wrnty_term_mth_cnt     ,func_curr_code     ,external_reference_nbr     ,gsdb_org_code     ,install_date     ,install_loc_oper_unit_id     ,install_location_id     ,install_location_type_code     ,inventory_item_id     ,inventory_master_org_id     ,inventory_org_id     ,invtry_item_desc     ,invtry_item_flag     ,invtry_item_sponsor_loc_id     ,invtry_item_status_code     ,invtry_org_tran_code     ,invtry_pass_nbr     ,invtry_tran_code     ,invtry_uom_code     ,item_instance_status_desc     ,item_instance_status_id     ,item_instance_status_name     ,item_instance_tran_code     ,item_type_name     ,last_order_line_id     ,last_valid_invtry_org_id     ,location_id     ,location_type_code     ,nl_trackable_flag     ,offering_acctg_type_code     ,oper_unit_country_code     ,operating_unit_id     ,operating_unit_name     ,order_date     ,order_header_id     ,order_line_nbr     ,order_nbr     ,prod_act_order_end_date     ,prod_act_order_start_date     ,prod_act_svc_end_date     ,prod_act_svc_start_date     ,product_class     ,product_class_model     ,product_id     ,product_id_formatted     ,product_model     ,product_source_org_id     ,product_submodel     ,region_code     ,region_desc     ,return_by_date     ,serial_nbr_control_code     ,service_order_allowed_flag     ,serviceable_product_flag     ,ship_to_site_use_id     ,shippable_item_flag     ,status_tran_code     ,svc_act_order_end_date     ,svc_act_order_start_date     ,svc_bmr_amt_ent     ,svc_bmr_curr_code     ,terminated_flag     ,version_label_date     ,version_label_desc     ,version_label_name     ,vldtn_inventory_org_id     ,vrsn_lbl_tran_code     <WM_COMMENT_START> SDI TAR to add Unicode field <WM_COMMENT_END>     ,invtry_item_desc_unc     ,prev_site_nbr	     ,service_tier_name,	 esd_flag,                   media_type,                 license_model,              license_start_date,         license_end_date           )SELECT      EDW23.instance_id     ,EDW23.item_instance_id     ,EDW23.active_end_date     ,EDW23.active_start_date     ,EDW23.actual_return_date     ,EDW23.actual_ship_date     ,EDW23.area_code     ,EDW23.area_desc     ,EDW23.bill_to_site_use_id     ,EDW23.bom_enabled_flag     ,EDW23.country_code     ,EDW23.country_desc     ,EDW23.crnt_loc_cs_fml_org_code     ,EDW23.customer_po_date     ,EDW23.customer_po_nbr     ,EDW23.dflt_service_coverage_code     ,EDW23.dflt_service_duration     ,EDW23.dflt_service_duration_cnt     ,EDW23.dflt_service_product_id     ,EDW23.dflt_wrnty_coverage_code     ,EDW23.dflt_wrnty_product_desc     ,EDW23.dflt_wrnty_product_id     ,EDW23.dflt_wrnty_term_mth_cnt     ,EDW23.func_curr_code     ,EDW23.external_reference_nbr     ,EDW23.gsdb_org_code     ,EDW23.install_date     ,EDW23.install_loc_oper_unit_id     ,EDW23.install_location_id     ,EDW23.install_location_type_code     ,EDW23.inventory_item_id     ,EDW23.inventory_master_org_id     ,EDW23.inventory_org_id     ,EDW23.invtry_item_desc     ,EDW23.invtry_item_flag     ,EDW23.invtry_item_sponsor_loc_id     ,EDW23.invtry_item_status_code     ,EDW23.invtry_org_tran_code     ,EDW23.invtry_pass_nbr     ,EDW23.invtry_tran_code     ,EDW23.invtry_uom_code     ,EDW23.item_instance_status_desc     ,EDW23.item_instance_status_id     ,EDW23.item_instance_status_name     ,EDW23.item_instance_tran_code     ,EDW23.item_type_name     ,EDW23.last_order_line_id     ,EDW23.last_valid_invtry_org_id     ,EDW23.location_id     ,EDW23.location_type_code     ,EDW23.nl_trackable_flag     ,EDW23.offering_acctg_type_code     ,EDW23.oper_unit_country_code     ,EDW23.operating_unit_id     ,EDW23.operating_unit_name     ,EDW23.order_date     ,EDW23.order_header_id     ,EDW23.order_line_nbr     ,EDW23.order_nbr     ,EDW23.prod_act_order_end_date     ,EDW23.prod_act_order_start_date     ,EDW23.prod_act_svc_end_date     ,EDW23.prod_act_svc_start_date     ,EDW23.product_class     ,EDW23.product_class_model     ,EDW23.product_id     ,EDW23.product_id_formatted     ,EDW23.product_model     ,EDW23.product_source_org_id     ,EDW23.product_submodel     ,EDW23.region_code     ,EDW23.region_desc     ,EDW23.return_by_date     ,EDW23.serial_nbr_control_code     ,EDW23.service_order_allowed_flag     ,EDW23.serviceable_product_flag     ,EDW23.ship_to_site_use_id     ,EDW23.shippable_item_flag     ,EDW23.status_tran_code     ,EDW23.svc_act_order_end_date     ,EDW23.svc_act_order_start_date     ,EDW24A.svc_bmr_amt_ent     ,EDW24A.svc_bmr_curr_code     ,EDW23.terminated_flag     ,EDW23.version_label_date     ,EDW23.version_label_desc     ,EDW23.version_label_name     ,EDW23.vldtn_inventory_org_id     ,EDW23.vrsn_lbl_tran_code     ,EDW23.invtry_item_desc_unc     ,EDW23.prev_site_nbr	     ,EDW23.service_tier_name,	 EDW23.esd_flag,                        EDW23.media_type,                      EDW23.license_model,                   EDW23.license_start_date,              EDW23.license_end_date           FROM  ${AAPPLLIIDD1EENNVV}_install_base_dn_t23 EDW23,${AAPPLLIIDD1EENNVV}_install_base_dn_t24a EDW24AWHERE  EDW23.gsdb_org_code = EDW24A.gsdb_org_codeAND EDW23.dflt_service_product_id = EDW24A.product_idAND EDW23.gsdb_org_code IS NOT NULL
+
+--Translated Query: SUCCESS
+
+    INSERT 
+    INTO
+        TABLE
+        ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t24b           SELECT
+            EDW23.instance_id,
+            EDW23.item_instance_id,
+            EDW23.active_end_date,
+            EDW23.active_start_date,
+            EDW23.actual_return_date,
+            EDW23.actual_ship_date,
+            EDW23.area_code,
+            EDW23.area_desc,
+            EDW23.bill_to_site_use_id,
+            EDW23.bom_enabled_flag,
+            EDW23.country_code,
+            EDW23.country_desc,
+            EDW23.crnt_loc_cs_fml_org_code,
+            EDW23.customer_po_date,
+            EDW23.customer_po_nbr,
+            EDW23.dflt_service_coverage_code,
+            EDW23.dflt_service_duration,
+            EDW23.dflt_service_duration_cnt,
+            EDW23.dflt_service_product_id,
+            EDW23.dflt_wrnty_coverage_code,
+            EDW23.dflt_wrnty_product_desc,
+            EDW23.dflt_wrnty_product_id,
+            EDW23.dflt_wrnty_term_mth_cnt,
+            EDW23.external_reference_nbr,
+            EDW23.func_curr_code,
+            EDW23.gsdb_org_code,
+            EDW23.install_date,
+            EDW23.install_loc_oper_unit_id,
+            EDW23.install_location_id,
+            EDW23.install_location_type_code,
+            EDW23.inventory_item_id,
+            EDW23.inventory_master_org_id,
+            EDW23.inventory_org_id,
+            EDW23.invtry_item_desc,
+            EDW23.invtry_item_flag,
+            EDW23.invtry_item_sponsor_loc_id,
+            EDW23.invtry_item_status_code,
+            EDW23.invtry_org_tran_code,
+            EDW23.invtry_pass_nbr,
+            EDW23.invtry_tran_code,
+            EDW23.invtry_uom_code,
+            EDW23.item_instance_status_desc,
+            EDW23.item_instance_status_id,
+            EDW23.item_instance_status_name,
+            EDW23.item_instance_tran_code,
+            EDW23.item_type_name,
+            EDW23.last_order_line_id,
+            EDW23.last_valid_invtry_org_id,
+            EDW23.location_id,
+            EDW23.location_type_code,
+            EDW23.nl_trackable_flag,
+            EDW23.offering_acctg_type_code,
+            EDW23.oper_unit_country_code,
+            EDW23.operating_unit_id,
+            EDW23.operating_unit_name,
+            EDW23.order_date,
+            EDW23.order_header_id,
+            EDW23.order_line_nbr,
+            EDW23.order_nbr,
+            EDW23.prod_act_order_end_date,
+            EDW23.prod_act_order_start_date,
+            EDW23.prod_act_svc_end_date,
+            EDW23.prod_act_svc_start_date,
+            EDW23.product_class,
+            EDW23.product_class_model,
+            EDW23.product_id,
+            EDW23.product_id_formatted,
+            EDW23.product_model,
+            EDW23.product_source_org_id,
+            EDW23.product_submodel,
+            EDW23.region_code,
+            EDW23.region_desc,
+            EDW23.return_by_date,
+            null,
+            EDW23.serial_nbr_control_code,
+            EDW23.service_order_allowed_flag,
+            EDW23.serviceable_product_flag,
+            EDW23.ship_to_site_use_id,
+            EDW23.shippable_item_flag,
+            EDW23.status_tran_code,
+            EDW23.svc_act_order_end_date,
+            EDW23.svc_act_order_start_date,
+            EDW24A.svc_bmr_amt_ent,
+            EDW24A.svc_bmr_curr_code,
+            EDW23.terminated_flag,
+            EDW23.version_label_date,
+            EDW23.version_label_desc,
+            EDW23.version_label_name,
+            EDW23.vldtn_inventory_org_id,
+            EDW23.vrsn_lbl_tran_code,
+            EDW23.invtry_item_desc_unc,
+            EDW23.prev_site_nbr,
+            EDW23.service_tier_name,
+            EDW23.esd_flag,
+            EDW23.media_type,
+            EDW23.license_model,
+            EDW23.license_start_date,
+            EDW23.license_end_date,
+            EDW23.cit_vendor_code,
+            EDW23.mdm_product_identifier,
+            EDW23.mdm_solution_identifier
+        FROM
+            ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t23    AS EDW23   ,
+            ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t24a    AS EDW24A   
+        WHERE
+            EDW23.gsdb_org_code = EDW24A.gsdb_org_code  
+            AND EDW23.dflt_service_product_id = EDW24A.product_id   
+            AND EDW23.gsdb_org_code  IS NOT NULL;
+
+--Original Query:
+  ----INSERT INTO ${AAPPLLIIDD1EENNVV}_install_base_dn_t24b(      instance_id     ,item_instance_id     ,active_end_date     ,active_start_date     ,actual_return_date     ,actual_ship_date     ,area_code     ,area_desc     ,bill_to_site_use_id     ,bom_enabled_flag     ,country_code     ,country_desc     ,crnt_loc_cs_fml_org_code     ,customer_po_date     ,customer_po_nbr     ,dflt_service_coverage_code     ,dflt_service_duration     ,dflt_service_duration_cnt     ,dflt_service_product_id     ,dflt_wrnty_coverage_code     ,dflt_wrnty_product_desc     ,dflt_wrnty_product_id     ,dflt_wrnty_term_mth_cnt     ,func_curr_code     ,external_reference_nbr     ,gsdb_org_code     ,install_date     ,install_loc_oper_unit_id     ,install_location_id     ,install_location_type_code     ,inventory_item_id     ,inventory_master_org_id     ,invtry_item_desc     ,invtry_item_flag     ,invtry_item_sponsor_loc_id     ,invtry_item_status_code     ,invtry_org_tran_code     ,invtry_pass_nbr     ,invtry_tran_code     ,invtry_uom_code     ,item_instance_status_desc     ,item_instance_status_id     ,item_instance_status_name     ,item_instance_tran_code     ,item_type_name     ,last_order_line_id     ,last_valid_invtry_org_id     ,location_id     ,location_type_code     ,nl_trackable_flag     ,offering_acctg_type_code     ,oper_unit_country_code     ,operating_unit_id     ,operating_unit_name     ,order_date     ,order_header_id     ,order_line_nbr     ,order_nbr     ,prod_act_order_end_date     ,prod_act_order_start_date     ,prod_act_svc_end_date     ,prod_act_svc_start_date     ,product_class     ,product_class_model     ,product_id     ,product_id_formatted     ,product_model     ,product_source_org_id     ,product_submodel     ,region_code     ,region_desc     ,return_by_date     ,serial_nbr_control_code     ,service_order_allowed_flag     ,serviceable_product_flag     ,ship_to_site_use_id     ,shippable_item_flag     ,status_tran_code     ,svc_act_order_end_date     ,svc_act_order_start_date     ,svc_bmr_amt_ent     ,svc_bmr_curr_code     ,terminated_flag     ,version_label_date     ,version_label_desc     ,version_label_name     ,vldtn_inventory_org_id     ,vrsn_lbl_tran_code     <WM_COMMENT_START> SDI TAR to add Unicode field <WM_COMMENT_END>     ,invtry_item_desc_unc     ,prev_site_nbr	     ,service_tier_name,	 esd_flag,                   media_type,                 license_model,              license_start_date,         license_end_date           )SELECT      EDW23.instance_id     ,EDW23.item_instance_id     ,EDW23.active_end_date     ,EDW23.active_start_date     ,EDW23.actual_return_date     ,EDW23.actual_ship_date     ,EDW23.area_code     ,EDW23.area_desc     ,EDW23.bill_to_site_use_id     ,EDW23.bom_enabled_flag     ,EDW23.country_code     ,EDW23.country_desc     ,EDW23.crnt_loc_cs_fml_org_code     ,EDW23.customer_po_date     ,EDW23.customer_po_nbr     ,EDW23.dflt_service_coverage_code     ,EDW23.dflt_service_duration     ,EDW23.dflt_service_duration_cnt     ,EDW23.dflt_service_product_id     ,EDW23.dflt_wrnty_coverage_code     ,EDW23.dflt_wrnty_product_desc     ,EDW23.dflt_wrnty_product_id     ,EDW23.dflt_wrnty_term_mth_cnt     ,EDW23.func_curr_code     ,EDW23.external_reference_nbr     ,EDW23.gsdb_org_code     ,EDW23.install_date     ,EDW23.install_loc_oper_unit_id     ,EDW23.install_location_id     ,EDW23.install_location_type_code     ,EDW23.inventory_item_id     ,EDW23.inventory_master_org_id     ,EDW23.invtry_item_desc     ,EDW23.invtry_item_flag     ,EDW23.invtry_item_sponsor_loc_id     ,EDW23.invtry_item_status_code     ,EDW23.invtry_org_tran_code     ,EDW23.invtry_pass_nbr     ,EDW23.invtry_tran_code     ,EDW23.invtry_uom_code     ,EDW23.item_instance_status_desc     ,EDW23.item_instance_status_id     ,EDW23.item_instance_status_name     ,EDW23.item_instance_tran_code     ,EDW23.item_type_name     ,EDW23.last_order_line_id     ,EDW23.last_valid_invtry_org_id     ,EDW23.location_id     ,EDW23.location_type_code     ,EDW23.nl_trackable_flag     ,EDW23.offering_acctg_type_code     ,EDW23.oper_unit_country_code     ,EDW23.operating_unit_id     ,EDW23.operating_unit_name     ,EDW23.order_date     ,EDW23.order_header_id     ,EDW23.order_line_nbr     ,EDW23.order_nbr     ,EDW23.prod_act_order_end_date     ,EDW23.prod_act_order_start_date     ,EDW23.prod_act_svc_end_date     ,EDW23.prod_act_svc_start_date     ,EDW23.product_class     ,EDW23.product_class_model     ,EDW23.product_id     ,EDW23.product_id_formatted     ,EDW23.product_model     ,EDW23.product_source_org_id     ,EDW23.product_submodel     ,EDW23.region_code     ,EDW23.region_desc     ,EDW23.return_by_date     ,EDW23.serial_nbr_control_code     ,EDW23.service_order_allowed_flag     ,EDW23.serviceable_product_flag     ,EDW23.ship_to_site_use_id     ,EDW23.shippable_item_flag     ,EDW23.status_tran_code     ,EDW23.svc_act_order_end_date     ,EDW23.svc_act_order_start_date     <WM_COMMENT_START> svc_bmr_amt_ent <WM_COMMENT_END>     ,NULL     <WM_COMMENT_START> svc_bmr_curr_code <WM_COMMENT_END>     ,NULL     ,EDW23.terminated_flag     ,EDW23.version_label_date     ,EDW23.version_label_desc     ,EDW23.version_label_name     ,EDW23.vldtn_inventory_org_id     ,EDW23.vrsn_lbl_tran_code     ,EDW23.invtry_item_desc_unc     ,EDW23.prev_site_nbr	     ,EDW23.service_tier_name,	 EDW23.esd_flag,                        EDW23.media_type,                      EDW23.license_model,                   EDW23.license_start_date,              EDW23.license_end_date           FROM  ${AAPPLLIIDD1EENNVV}_install_base_dn_t23 EDW23WHERE (instance_id, item_instance_id) NOT IN (	SELECT instance_id, item_instance_id	FROM ${AAPPLLIIDD1EENNVV}_install_base_dn_t24b)
+
+--Translated Query: SUCCESS
+
+    WITH qq1 AS (    SELECT
+        EDW23.instance_id,
+        EDW23.item_instance_id,
+        EDW23.active_end_date,
+        EDW23.active_start_date,
+        EDW23.actual_return_date,
+        EDW23.actual_ship_date,
+        EDW23.area_code,
+        EDW23.area_desc,
+        EDW23.bill_to_site_use_id,
+        EDW23.bom_enabled_flag,
+        EDW23.country_code,
+        EDW23.country_desc,
+        EDW23.crnt_loc_cs_fml_org_code,
+        EDW23.customer_po_date,
+        EDW23.customer_po_nbr,
+        EDW23.dflt_service_coverage_code,
+        EDW23.dflt_service_duration,
+        EDW23.dflt_service_duration_cnt,
+        EDW23.dflt_service_product_id,
+        EDW23.dflt_wrnty_coverage_code,
+        EDW23.dflt_wrnty_product_desc,
+        EDW23.dflt_wrnty_product_id,
+        EDW23.dflt_wrnty_term_mth_cnt,
+        EDW23.external_reference_nbr,
+        EDW23.func_curr_code,
+        EDW23.gsdb_org_code,
+        EDW23.install_date,
+        EDW23.install_loc_oper_unit_id,
+        EDW23.install_location_id,
+        EDW23.install_location_type_code,
+        EDW23.inventory_item_id,
+        EDW23.inventory_master_org_id,
+        null,
+        EDW23.invtry_item_desc,
+        EDW23.invtry_item_flag,
+        EDW23.invtry_item_sponsor_loc_id,
+        EDW23.invtry_item_status_code,
+        EDW23.invtry_org_tran_code,
+        EDW23.invtry_pass_nbr,
+        EDW23.invtry_tran_code,
+        EDW23.invtry_uom_code,
+        EDW23.item_instance_status_desc,
+        EDW23.item_instance_status_id,
+        EDW23.item_instance_status_name,
+        EDW23.item_instance_tran_code,
+        EDW23.item_type_name,
+        EDW23.last_order_line_id,
+        EDW23.last_valid_invtry_org_id,
+        EDW23.location_id,
+        EDW23.location_type_code,
+        EDW23.nl_trackable_flag,
+        EDW23.offering_acctg_type_code,
+        EDW23.oper_unit_country_code,
+        EDW23.operating_unit_id,
+        EDW23.operating_unit_name,
+        EDW23.order_date,
+        EDW23.order_header_id,
+        EDW23.order_line_nbr,
+        EDW23.order_nbr,
+        EDW23.prod_act_order_end_date,
+        EDW23.prod_act_order_start_date,
+        EDW23.prod_act_svc_end_date,
+        EDW23.prod_act_svc_start_date,
+        EDW23.product_class,
+        EDW23.product_class_model,
+        EDW23.product_id,
+        EDW23.product_id_formatted,
+        EDW23.product_model,
+        EDW23.product_source_org_id,
+        EDW23.product_submodel,
+        EDW23.region_code,
+        EDW23.region_desc,
+        EDW23.return_by_date,
+        null,
+        EDW23.serial_nbr_control_code,
+        EDW23.service_order_allowed_flag,
+        EDW23.serviceable_product_flag,
+        EDW23.ship_to_site_use_id,
+        EDW23.shippable_item_flag,
+        EDW23.status_tran_code,
+        EDW23.svc_act_order_end_date,
+        EDW23.svc_act_order_start_date,
+        CAST( NULL AS STRING ),
+        CAST( NULL AS STRING ),
+        EDW23.terminated_flag,
+        EDW23.version_label_date,
+        EDW23.version_label_desc,
+        EDW23.version_label_name,
+        EDW23.vldtn_inventory_org_id,
+        EDW23.vrsn_lbl_tran_code,
+        EDW23.invtry_item_desc_unc,
+        EDW23.prev_site_nbr,
+        EDW23.service_tier_name,
+        EDW23.esd_flag,
+        EDW23.media_type,
+        EDW23.license_model,
+        EDW23.license_start_date,
+        EDW23.license_end_date,
+        EDW23.cit_vendor_code,
+        EDW23.mdm_product_identifier,
+        EDW23.mdm_solution_identifier
+    FROM
+        ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t23    AS EDW23 
+    LEFT OUTER JOIN
+        (SELECT
+            DISTINCT instance_id AS auto_c00,
+            item_instance_id AS auto_c01  
+        FROM
+            ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t24b ) AS autoAlias_50 
+            ON ( upper(trim(instance_id)) = upper(trim(autoAlias_50.AUTO_C00)) 
+            AND item_instance_id = autoAlias_50.AUTO_C01 ) 
+    WHERE
+        autoAlias_50.AUTO_C00 IS  NULL  
+        AND autoAlias_50.AUTO_C01 IS  NULL         ) INSERT 
+        INTO
+            TABLE
+            ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t24b       SELECT
+                * 
+            FROM
+                qq1;
+
+--Original Query:
+  ----DELETE FROM ${AAPPLLIIDD1EENNVV}_install_base_dn_t21 ALL
+
+--Translated Query: SUCCESS w8c
+
+   ---- TRUNCATE TABLE   ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t21;

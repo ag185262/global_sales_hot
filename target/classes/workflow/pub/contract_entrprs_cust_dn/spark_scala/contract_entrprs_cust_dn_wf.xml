@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="contract-entrprs-cust-dn-spark-scala-wf">
+   <global>
+     <job-tracker>${job_tracker}</job-tracker>
+     <name-node>${name_node}</name-node>
+     <configuration>
+       <property>
+         <name>tez.queue.name</name>
+         <value>${queue_name}</value>
+       </property>
+       <property>
+         <name>mapreduce.job.queuename</name>
+         <value>${queue_name}</value>
+       </property>
+     </configuration>
+   </global>
+   <credentials>
+     <credential name="cred" type="hcat">
+       <property>
+         <name>hcat.metastore.principal</name>
+         <value>${metastorePrincipal}</value>
+       </property>
+       <property>
+         <name>hcat.metastore.uri</name>
+         <value>${metaStoreUri}</value>
+       </property>
+     </credential>
+   </credentials>
+   <start to="d8-contract-entrprs-cust-dn-t01-ins" />
+   <action cred="cred" name="d8-contract-entrprs-cust-dn-t01-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-entrprs-cust-dn-t01-ins</name>    
+       <class>com.ncr.edl.apollo.contract_entrprs_cust_dn.d8contractentrprscustdnt01insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-contract-entrprs-cust-dn-t02-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-entrprs-cust-dn-t02-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-entrprs-cust-dn-t02-ins</name>    
+       <class>com.ncr.edl.apollo.contract_entrprs_cust_dn.d8contractentrprscustdnt02insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-contract-entrprs-cust-dn-t03-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-entrprs-cust-dn-t03-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-entrprs-cust-dn-t03-ins</name>    
+       <class>com.ncr.edl.apollo.contract_entrprs_cust_dn.d8contractentrprscustdnt03insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-contract-entrprs-cust-dn-ld-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-entrprs-cust-dn-ld-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-entrprs-cust-dn-ld-ins</name>    
+       <class>com.ncr.edl.apollo.contract_entrprs_cust_dn.d8contractentrprscustdnldinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>
+     </spark>
+     <ok to="end" />
+     <error to="fail" />
+   </action>
+   <kill name="fail">
+      <message>Error while running workflow entrprs-cust-dn-spark-scala-wf workflow: [${wf:errorMessage(wf:lastErrorNode())}]</message>
+   </kill>
+   <end name="end" />
+</workflow-app>

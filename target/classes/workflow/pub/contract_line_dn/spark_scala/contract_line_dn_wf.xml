@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="contract-line-dn-spark-scala-wf">
+   <global>
+     <job-tracker>${job_tracker}</job-tracker>
+     <name-node>${name_node}</name-node>
+     <configuration>
+       <property>
+         <name>tez.queue.name</name>
+         <value>${queue_name}</value>
+       </property>
+       <property>
+         <name>mapreduce.job.queuename</name>
+         <value>${queue_name}</value>
+       </property>
+     </configuration>
+   </global>
+   <credentials>
+     <credential name="cred" type="hcat">
+       <property>
+         <name>hcat.metastore.principal</name>
+         <value>${metastorePrincipal}</value>
+       </property>
+       <property>
+         <name>hcat.metastore.uri</name>
+         <value>${metaStoreUri}</value>
+       </property>
+     </credential>
+   </credentials>
+   <start to="d8-contract-line-dn-ld-01" />
+   <action cred="cred" name="d8-contract-line-dn-ld-01">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-line-dn-ld-01</name>    
+       <class>com.ncr.edl.apollo.contract_line_dn.d8contractlinednld01Runner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-contract-line-dn-hd-ren" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-line-dn-hd-ren">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-line-dn-hd-ren</name>    
+       <class>com.ncr.edl.apollo.contract_line_dn.d8contractlinednhdrenRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-contract-line-dn-ld-ren" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-line-dn-ld-ren">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-line-dn-ld-ren</name>    
+       <class>com.ncr.edl.apollo.contract_line_dn.d8contractlinednldrenRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-contract-line-dn-ren" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-line-dn-ren">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-line-dn-ren</name>    
+       <class>com.ncr.edl.apollo.contract_line_dn.d8contractlinednrenRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-contract-line-dn-ld" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-contract-line-dn-ld">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-contract-line-dn-ld</name>    
+       <class>com.ncr.edl.apollo.contract_line_dn.d8contractlinednldRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="end" />
+     <error to="fail" />
+   </action>
+   <kill name="fail">
+      <message>Error while running workflow contract-line-dn-spark-scala-wf workflow: [${wf:errorMessage(wf:lastErrorNode())}]</message>
+   </kill>
+   <end name="end" />
+</workflow-app>

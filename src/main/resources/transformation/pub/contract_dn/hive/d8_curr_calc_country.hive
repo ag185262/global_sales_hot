@@ -1,0 +1,2 @@
+!run ./hive_init.hql
+!run ./d8_curr_calc_country_merge.hql

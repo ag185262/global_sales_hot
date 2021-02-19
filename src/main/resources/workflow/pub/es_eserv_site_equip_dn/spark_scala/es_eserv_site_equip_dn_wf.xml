@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="es-eserv-site-equip-dn-spark-scala-wf">
+   <global>
+     <job-tracker>${job_tracker}</job-tracker>
+     <name-node>${name_node}</name-node>
+     <configuration>
+       <property>
+         <name>tez.queue.name</name>
+         <value>${queue_name}</value>
+       </property>
+       <property>
+         <name>mapreduce.job.queuename</name>
+         <value>${queue_name}</value>
+       </property>
+     </configuration>
+   </global>
+   <credentials>
+     <credential name="cred" type="hcat">
+       <property>
+         <name>hcat.metastore.principal</name>
+         <value>${metastorePrincipal}</value>
+       </property>
+       <property>
+         <name>hcat.metastore.uri</name>
+         <value>${metaStoreUri}</value>
+       </property>
+     </credential>
+   </credentials>
+   <start to="d8-es-eserv-site-equip-dn-t1-ins" />
+   
+   <action cred="cred" name="d8-es-eserv-site-equip-dn-t1-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-eserv-site-equip-dn-t1-ins</name>    
+       <class>com.ncr.edl.apollo.es_eserv_site_equip_dn.d8eseservsiteequipdnt1insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-es-eserv-site-equip-dn-t2-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-eserv-site-equip-dn-t2-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-eserv-site-equip-dn-t2-ins</name>    
+       <class>com.ncr.edl.apollo.es_eserv_site_equip_dn.d8eseservsiteequipdnt2insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-es-eserv-site-equip-dn-t3-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-eserv-site-equip-dn-t3-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-eserv-site-equip-dn-t3-ins</name>    
+       <class>com.ncr.edl.apollo.es_eserv_site_equip_dn.d8eseservsiteequipdnt3insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-es-eserv-site-equip-dn-t4-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-eserv-site-equip-dn-t4-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-eserv-site-equip-dn-t4-ins</name>    
+       <class>com.ncr.edl.apollo.es_eserv_site_equip_dn.d8eseservsiteequipdnt4insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-es-eserv-site-equip-dn-ld-1-ins" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-es-eserv-site-equip-dn-ld-1-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-eserv-site-equip-dn-ld-1-ins</name>    
+       <class>com.ncr.edl.apollo.es_eserv_site_equip_dn.d8eseservsiteequipdnld1insRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-es-eserv-site-equip-dn-ren" />
+     <error to="fail" />
+   </action>
+   
+   <action cred="cred" name="d8-es-eserv-site-equip-dn-ren">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-eserv-site-equip-dn-ren</name>    
+       <class>com.ncr.edl.apollo.es_eserv_site_equip_dn.d8eseservsiteequipdnrenRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-es-eserv-site-equip-dn-ld-ins" />
+     <error to="fail" />
+   </action>
+  
+   <action cred="cred" name="d8-es-eserv-site-equip-dn-ld-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-eserv-site-equip-dn-ld-ins</name>    
+       <class>com.ncr.edl.apollo.es_eserv_site_equip_dn.d8eseservsiteequipdnldinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="end" />
+     <error to="fail" />
+   </action>
+   <kill name="fail">
+      <message>Error while running workflow es-eserv-site-equip-dn-spark-scala-wf workflow: [${wf:errorMessage(wf:lastErrorNode())}]</message>
+   </kill>
+   <end name="end" />
+</workflow-app>

@@ -1,0 +1,2 @@
+!run ./hive_init.hql
+!run ./D8_Es_slm_class_merged.hql

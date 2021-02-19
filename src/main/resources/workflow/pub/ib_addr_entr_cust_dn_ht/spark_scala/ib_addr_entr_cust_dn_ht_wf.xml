@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="ib-addr-entr-cust-dn-ht-spark-scala-wf">
+   <global>
+     <job-tracker>${job_tracker}</job-tracker>
+     <name-node>${name_node}</name-node>
+     <configuration>
+       <property>
+         <name>tez.queue.name</name>
+         <value>${queue_name}</value>
+       </property>
+       <property>
+         <name>mapreduce.job.queuename</name>
+         <value>${queue_name}</value>
+       </property>
+     </configuration>
+   </global>
+   <credentials>
+     <credential name="cred" type="hcat">
+       <property>
+         <name>hcat.metastore.principal</name>
+         <value>${metastorePrincipal}</value>
+       </property>
+       <property>
+         <name>hcat.metastore.uri</name>
+         <value>${metaStoreUri}</value>
+       </property>
+     </credential>
+   </credentials>
+   <start to="d8-ib-addr-entr-cust-dn-ht-ins" />
+   
+   <action cred="cred" name="d8-ib-addr-entr-cust-dn-ht-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-ib-addr-entr-cust-dn-ht-ins</name>    
+       <class>com.ncr.edl.apollo.ib_addr_entr_cust_dn_ht.d8ibaddrentrcustdnhtinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-ib-addr-entr-cust-dn-ht-ren" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-ib-addr-entr-cust-dn-ht-ren">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-ib-addr-entr-cust-dn-ht-ren</name>    
+       <class>com.ncr.edl.apollo.ib_addr_entr_cust_dn_ht.d8ibaddrentrcustdnhtrenRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-ib-addr-entr-cust-dn-ht-ld-ins" />
+     <error to="fail" />
+   </action> 
+   <action cred="cred" name="d8-ib-addr-entr-cust-dn-ht-ld-ins">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-ib-addr-entr-cust-dn-ht-ld-ins</name>    
+       <class>com.ncr.edl.apollo.ib_addr_entr_cust_dn_ht.d8ibaddrentrcustdnhtldinsRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+		<arg>${activityCountRequired}</arg>
+     </spark>
+     <ok to="end" />
+     <error to="fail" />
+   </action>  
+   <kill name="fail">
+      <message>Error while running workflow ib-addr-entr-cust-dn-ht-spark-scala-wf workflow: [${wf:errorMessage(wf:lastErrorNode())}]</message>
+   </kill>
+   <end name="end" />
+</workflow-app>

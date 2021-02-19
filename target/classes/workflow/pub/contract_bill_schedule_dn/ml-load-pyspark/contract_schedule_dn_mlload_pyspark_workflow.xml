@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="contract-schedule-dn-ml-load-pyspark-wf">
+	<global>
+		<job-tracker>${jobTracker}</job-tracker>
+	    <name-node>${nameNode}</name-node>
+	    <configuration>
+	      	<property>
+	        	<name>tez.queue.name</name>
+        		<value>${queueName}</value>
+	      	</property>
+	      	<property>
+	        	<name>mapreduce.job.queuename</name>
+        		<value>${queueName}</value>
+	      	</property>
+	    </configuration>
+	</global>
+
+	<credentials>
+		<credential name="prd-cert" type="hcat">
+            <property>
+                <name>hcat.metastore.uri</name>
+                <value>${metaStoreUri}</value>
+            </property>
+            <property>
+                <name>hcat.metastore.principal</name>
+                <value>${jdbcPrincipal}</value>
+            </property>
+        </credential>
+	</credentials>
+
+	<start to="fork-node"/>
+
+	<fork name="fork-node">
+		<path start = "d8t-contr-bill-stream-ml-ins"/>
+		<path start = "d8t-contr-header-svc-supp-ml-ins"/>
+		<path start = "d8t-contract-bill-invc-line-ml-ins"/>
+		<path start = "d8t-contract-group-lk-ml-ins"/>
+		<path start = "d8t-contract-group-xref-ml-ins"/>
+		<path start = "d8t-contract-line-bill-ml-ins"/>
+		<path start = "d8t-contract-line-style-lk-ml-ins"/>
+		<path start = "d8t-contract-line-svc-supp-ml-ins"/>
+		<path start = "d8t-contract-line-xref-ml-ins"/>
+		<path start = "d8t-contract-lvl-element-ml-ins"/>
+		<path start = "d8t-contract-party-role-ml-ins"/>
+		<path start = "d8t-contract-subline-bill-ml-ins"/>
+	</fork>
+
+	<action cred="prd-cert" name="d8t-contr-bill-stream-ml-ins">
+        <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>d8t_contr_bill_stream_ml_ins</name>
+            <jar>d8t_contr_bill_stream_ml_ins.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+        <ok to="join-node"/>
+        <error to="fail"/>
+	</action>
+	
+	<action cred="prd-cert" name="d8t-contr-header-svc-supp-ml-ins">
+        <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>d8t_contr_header_svc_supp_ml_ins</name>
+            <jar>d8t_contr_header_svc_supp_ml_ins.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+        <ok to="join-node"/>
+        <error to="fail"/>
+	</action>
+	
+	<action cred="prd-cert" name="d8t-contract-bill-invc-line-ml-ins">
+        <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>d8t_contract_bill_invc_line_ml_ins</name>
+            <jar>d8t_contract_bill_invc_line_ml_ins.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+        <ok to="join-node"/>
+        <error to="fail"/>
+	</action>
+	
+	<action cred="prd-cert" name="d8t-contract-group-lk-ml-ins">
+        <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>d8t_contract_group_lk_ml_ins</name>
+            <jar>d8t_contract_group_lk_ml_ins.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+        <ok to="join-node"/>
+        <error to="fail"/>
+	</action>
+	
+	<action cred="prd-cert" name="d8t-contract-group-xref-ml-ins">
+        <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>d8t_contract_group_xref_ml_ins</name>
+            <jar>d8t_contract_group_xref_ml_ins.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+        <ok to="join-node"/>
+        <error to="fail"/>
+	</action>
+	
+	<action cred="prd-cert" name="d8t-contract-line-bill-ml-ins">
+        <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>d8t_contract_line_bill_ml_ins</name>
+            <jar>d8t_contract_line_bill_ml_ins.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+        <ok to="join-node"/>
+        <error to="fail"/>
+	</action>
+	
+	<action cred="prd-cert" name="d8t-contract-line-style-lk-ml-ins">
+        <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>d8t_contract_line_style_lk_ml_ins</name>
+            <jar>d8t_contract_line_style_lk_ml_ins.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+        <ok to="join-node"/>
+        <error to="fail"/>
+	</action>
+	
+	<action cred="prd-cert" name="d8t-contract-line-svc-supp-ml-ins">
+        <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>d8t_contract_line_svc_supp_ml_ins</name>
+            <jar>d8t_contract_line_svc_supp_ml_ins.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+        <ok to="join-node"/>
+        <error to="fail"/>
+	</action>
+	
+	<action cred="prd-cert" name="d8t-contract-line-xref-ml-ins">
+        <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>d8t_contract_line_xref_ml_ins</name>
+            <jar>d8t_contract_line_xref_ml_ins.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+        <ok to="join-node"/>
+        <error to="fail"/>
+	</action>
+	
+	<action cred="prd-cert" name="d8t-contract-lvl-element-ml-ins">
+        <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>d8t_contract_lvl_element_ml_ins</name>
+            <jar>d8t_contract_lvl_element_ml_ins.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+        <ok to="join-node"/>
+        <error to="fail"/>
+	</action>
+	
+	<action cred="prd-cert" name="d8t-contract-party-role-ml-ins">
+        <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>d8t_contract_party_role_ml_ins</name>
+            <jar>d8t_contract_party_role_ml_ins.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+        <ok to="join-node"/>
+        <error to="fail"/>
+	</action>
+	
+	<action cred="prd-cert" name="d8t-contract-subline-bill-ml-ins">
+        <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>d8t_contract_subline_bill_ml_ins</name>
+            <jar>d8t_contract_subline_bill_ml_ins.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+        <ok to="join-node"/>
+        <error to="fail"/>
+	</action>
+	
+	
+	
+	<join name = "join-node" to = "end"/>
+	
+	<kill name="fail">
+        	<message>Error in execution of contract_schedule_dn_mlload workflow</message>
+	</kill>
+	
+	<end name="end"/>
+	
+</workflow-app>

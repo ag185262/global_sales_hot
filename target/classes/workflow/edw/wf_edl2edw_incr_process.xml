@@ -1,0 +1,417 @@
+<workflow-app xmlns="uri:oozie:workflow:0.5" name="wf_edl2edw_incr_process">
+
+    <global>
+        <job-tracker>${jobTracker}</job-tracker>
+        <name-node>${nameNode}</name-node>
+        <configuration>
+            <property>
+                <name>tez.queue.name</name>
+                <value>${queueName}</value>
+            </property>
+            <property>
+                <name>mapreduce.job.queuename</name>
+                <value>${queueName}</value>
+            </property>
+        </configuration>
+    </global>
+
+    <credentials>
+        <credential name="hs2_credentials" type="hive2">
+            <property>
+                <name>hive2.server.principal</name>
+                <value>${jdbcPrincipal}</value>
+            </property>
+            <property>
+                <name>hive2.jdbc.url</name>
+                <value>${jdbcURL}</value>
+            </property>
+        </credential>
+    </credentials>
+
+    <start to="edl2edw_backup_removal"/>
+    <action name="edl2edw_backup_removal" cred="hs2_credentials">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <jdbc-url>${jdbcURL}</jdbc-url>
+            <script>${codeBaseDir}/transformation/edw/drop_previous_table.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+            <param>queueName=${queueName}</param>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.container.size=${containerSize}</argument>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.java.opts=${heapSize}</argument>
+
+        </hive2>
+        <ok to="edl2edw_backup_creation_contract_install_base_dn_incr"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+
+    <action name="edl2edw_backup_creation_contract_install_base_dn_incr" cred="hs2_credentials">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <jdbc-url>${jdbcURL}</jdbc-url>
+            <script>${codeBaseDir}/transformation/edw/backup_creation/contract_install_base_dn_incr.hql</script>
+          	<param>targetSchema=${targetSchema}</param>
+            <param>queueName=${queueName}</param>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.container.size=${containerSize}</argument>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.java.opts=${heapSize}</argument>
+
+        </hive2>
+        <ok to="edl2edw_backup_creation_contract_addr_dn_incr"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action name="edl2edw_backup_creation_contract_addr_dn_incr" cred="hs2_credentials">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <jdbc-url>${jdbcURL}</jdbc-url>
+            <script>${codeBaseDir}/transformation/edw/backup_creation/contract_addr_dn_incr.hql</script>
+          	<param>targetSchema=${targetSchema}</param>
+            <param>queueName=${queueName}</param>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.container.size=${containerSize}</argument>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.java.opts=${heapSize}</argument>
+
+        </hive2>
+        <ok to="edl2edw_backup_creation_contract_bill_sched_dn_incr"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action name="edl2edw_backup_creation_contract_bill_sched_dn_incr" cred="hs2_credentials">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <jdbc-url>${jdbcURL}</jdbc-url>
+            <script>${codeBaseDir}/transformation/edw/backup_creation/contract_bill_sched_dn_incr.hql</script>
+          	<param>targetSchema=${targetSchema}</param>
+            <param>queueName=${queueName}</param>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.container.size=${containerSize}</argument>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.java.opts=${heapSize}</argument>
+
+        </hive2>
+        <ok to="edl2edw_backup_creation_contract_coverage_dn_incr"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+
+    <action name="edl2edw_backup_creation_contract_coverage_dn_incr" cred="hs2_credentials">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <jdbc-url>${jdbcURL}</jdbc-url>
+            <script>${codeBaseDir}/transformation/edw/backup_creation/contract_coverage_dn_incr.hql</script>
+          	<param>targetSchema=${targetSchema}</param>
+            <param>queueName=${queueName}</param>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.container.size=${containerSize}</argument>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.java.opts=${heapSize}</argument>
+
+        </hive2>
+        <ok to="edl2edw_backup_creation_contract_dn_arcs_incr"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+
+    <action name="edl2edw_backup_creation_contract_dn_arcs_incr" cred="hs2_credentials">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <jdbc-url>${jdbcURL}</jdbc-url>
+            <script>${codeBaseDir}/transformation/edw/backup_creation/contract_dn_arcs_incr.hql</script>
+          	<param>targetSchema=${targetSchema}</param>
+            <param>queueName=${queueName}</param>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.container.size=${containerSize}</argument>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.java.opts=${heapSize}</argument>
+
+        </hive2>
+        <ok to="edl2edw_backup_creation_contract_dn_incr"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+
+    <action name="edl2edw_backup_creation_contract_dn_incr" cred="hs2_credentials">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <jdbc-url>${jdbcURL}</jdbc-url>
+            <script>${codeBaseDir}/transformation/edw/backup_creation/contract_dn_incr.hql</script>
+          	<param>targetSchema=${targetSchema}</param>
+            <param>queueName=${queueName}</param>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.container.size=${containerSize}</argument>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.java.opts=${heapSize}</argument>
+
+        </hive2>
+        <ok to="edl2edw_backup_creation_contract_dnc_incr"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+
+    <action name="edl2edw_backup_creation_contract_dnc_incr" cred="hs2_credentials">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <jdbc-url>${jdbcURL}</jdbc-url>
+            <script>${codeBaseDir}/transformation/edw/backup_creation/contract_dnc_incr.hql</script>
+          	<param>targetSchema=${targetSchema}</param>
+            <param>queueName=${queueName}</param>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.container.size=${containerSize}</argument>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.java.opts=${heapSize}</argument>
+
+        </hive2>
+        <ok to="edl2edw_backup_creation_contract_supt_dn_incr"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+
+    <action name="edl2edw_backup_creation_contract_supt_dn_incr" cred="hs2_credentials">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <jdbc-url>${jdbcURL}</jdbc-url>
+            <script>${codeBaseDir}/transformation/edw/backup_creation/contract_supt_dn_incr.hql</script>
+          	<param>targetSchema=${targetSchema}</param>
+            <param>queueName=${queueName}</param>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.container.size=${containerSize}</argument>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.java.opts=${heapSize}</argument>
+
+        </hive2>
+        <ok to="edl2edw_backup_creation_contract_supt_sum_dn_incr"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+
+    <action name="edl2edw_backup_creation_contract_supt_sum_dn_incr" cred="hs2_credentials">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <jdbc-url>${jdbcURL}</jdbc-url>
+            <script>${codeBaseDir}/transformation/edw/backup_creation/contract_supt_sum_dn_incr.hql</script>
+          	<param>targetSchema=${targetSchema}</param>
+            <param>queueName=${queueName}</param>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.container.size=${containerSize}</argument>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.java.opts=${heapSize}</argument>
+
+        </hive2>
+        <ok to="edl2edw_backup_creation_contract_unbilled_dn_incr"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+
+    <action name="edl2edw_backup_creation_contract_unbilled_dn_incr" cred="hs2_credentials">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <jdbc-url>${jdbcURL}</jdbc-url>
+            <script>${codeBaseDir}/transformation/edw/backup_creation/contract_unbilled_dn_incr.hql</script>
+          	<param>targetSchema=${targetSchema}</param>
+            <param>queueName=${queueName}</param>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.container.size=${containerSize}</argument>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.java.opts=${heapSize}</argument>
+
+        </hive2>
+        <ok to="edl2edw_backup_creation_install_base_addr_dn_incr"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action name="edl2edw_backup_creation_install_base_addr_dn_incr" cred="hs2_credentials">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <jdbc-url>${jdbcURL}</jdbc-url>
+            <script>${codeBaseDir}/transformation/edw/backup_creation/install_base_addr_dn_incr.hql</script>
+          	<param>targetSchema=${targetSchema}</param>
+            <param>queueName=${queueName}</param>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.container.size=${containerSize}</argument>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.java.opts=${heapSize}</argument>
+
+        </hive2>
+        <ok to="edl2edw_backup_creation_install_base_contract_dn_incr"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action name="edl2edw_backup_creation_install_base_contract_dn_incr" cred="hs2_credentials">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <jdbc-url>${jdbcURL}</jdbc-url>
+            <script>${codeBaseDir}/transformation/edw/backup_creation/install_base_contract_dn_incr.hql</script>
+          	<param>targetSchema=${targetSchema}</param>
+            <param>queueName=${queueName}</param>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.container.size=${containerSize}</argument>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.java.opts=${heapSize}</argument>
+
+        </hive2>
+        <ok to="edl2edw_backup_creation_install_base_dn_incr"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action name="edl2edw_backup_creation_install_base_dn_incr" cred="hs2_credentials">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <jdbc-url>${jdbcURL}</jdbc-url>
+            <script>${codeBaseDir}/transformation/edw/backup_creation/install_base_dn_incr.hql</script>
+          	<param>targetSchema=${targetSchema}</param>
+            <param>queueName=${queueName}</param>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.container.size=${containerSize}</argument>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.java.opts=${heapSize}</argument>
+
+        </hive2>
+        <ok to="forking-rowhash_genration"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <fork name="forking-rowhash_genration">
+        <path start="edl2edw_rowhash_genration_grp1"/>
+        <path start="edl2edw_rowhash_genration_grp2"/>
+        <path start="edl2edw_rowhash_genration_grp3"/>
+    </fork>
+
+
+    <action name="edl2edw_rowhash_genration_grp1" cred="hs2_credentials">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <jdbc-url>${jdbcURL}</jdbc-url>
+            <script>${codeBaseDir}/transformation/edw/edl2edw_rowhash_genration_grp1.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+            <param>queueName=${queueName}</param>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.container.size=${containerSize}</argument>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.java.opts=${heapSize}</argument>
+
+        </hive2>
+        <ok to="joining"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action name="edl2edw_rowhash_genration_grp2" cred="hs2_credentials">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <jdbc-url>${jdbcURL}</jdbc-url>
+            <script>${codeBaseDir}/transformation/edw/edl2edw_rowhash_genration_grp2.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+            <param>queueName=${queueName}</param>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.container.size=${containerSize}</argument>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.java.opts=${heapSize}</argument>
+
+        </hive2>
+        <ok to="joining"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+    <action name="edl2edw_rowhash_genration_grp3" cred="hs2_credentials">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <jdbc-url>${jdbcURL}</jdbc-url>
+            <script>${codeBaseDir}/transformation/edw/edl2edw_rowhash_genration_grp3.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+            <param>queueName=${queueName}</param>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.container.size=${containerSize}</argument>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.java.opts=${heapSize}</argument>
+
+        </hive2>
+        <ok to="joining"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+
+    <join name="joining" to="forking-increment_file_genration"/>
+
+
+    <fork name="forking-increment_file_genration">
+        <path start="edl2edw_increment_file_genration_grp1"/>
+        <path start="edl2edw_increment_file_genration_grp2"/>
+        <path start="edl2edw_increment_file_genration_grp3"/>
+        <path start="edl2edw_increment_file_genration_grp4"/>
+    </fork>
+
+
+    <action name="edl2edw_increment_file_genration_grp1" cred="hs2_credentials">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <jdbc-url>${jdbcURL}</jdbc-url>
+            <script>${codeBaseDir}/transformation/edw/edl2edw_increment_file_genration_grp1.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+            <param>queueName=${queueName}</param>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.container.size=${containerSize}</argument>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.java.opts=${heapSize}</argument>
+
+        </hive2>
+        <ok to="joining2"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+
+    <action name="edl2edw_increment_file_genration_grp2" cred="hs2_credentials">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <jdbc-url>${jdbcURL}</jdbc-url>
+            <script>${codeBaseDir}/transformation/edw/edl2edw_increment_file_genration_grp2.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+            <param>queueName=${queueName}</param>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.container.size=${containerSize}</argument>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.java.opts=${heapSize}</argument>
+
+        </hive2>
+        <ok to="joining2"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+
+    <action name="edl2edw_increment_file_genration_grp3" cred="hs2_credentials">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <jdbc-url>${jdbcURL}</jdbc-url>
+            <script>${codeBaseDir}/transformation/edw/edl2edw_increment_file_genration_grp3.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+            <param>queueName=${queueName}</param>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.container.size=${containerSize}</argument>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.java.opts=${heapSize}</argument>
+
+        </hive2>
+        <ok to="joining2"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+
+    <action name="edl2edw_increment_file_genration_grp4" cred="hs2_credentials">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <jdbc-url>${jdbcURL}</jdbc-url>
+            <script>${codeBaseDir}/transformation/edw/edl2edw_increment_file_genration_grp4.hql</script>
+            <param>targetSchema=${targetSchema}</param>
+            <param>queueName=${queueName}</param>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.container.size=${containerSize}</argument>
+            <argument>-hiveconf</argument>
+            <argument>hive.tez.java.opts=${heapSize}</argument>
+
+        </hive2>
+        <ok to="joining2"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+
+    <join name="joining2" to="end"/>
+
+    <action name="Email-On-Fail">
+        <email xmlns="uri:oozie:email-action:0.2">
+            <to>${JOB_FAIL_EMAIL_LIST}</to>
+            <subject>PRD01 Job Failed : ${wf:name()}</subject>
+            <body>Workflow Action Failed, ${wf:id()} Error Message :[${wf:errorMessage(wf:lastErrorNode())}]</body>
+        </email>
+        <ok to="kill"/>
+        <error to="kill"/>
+    </action>
+
+    <kill name="kill">
+        <message>Action Failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+    </kill>
+
+    <end name="end"/>
+
+</workflow-app>

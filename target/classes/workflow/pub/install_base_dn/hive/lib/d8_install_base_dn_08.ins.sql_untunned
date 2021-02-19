@@ -1,0 +1,189 @@
+----------------------------------------------------------------------------------------
+--THIS FILE IS CREATED AUTOMATICALLY USING Workload Transformation @ 2019/12/18 11:40:25 
+--Script Name: d8_install_base_dn_08.ins.sql
+--Inputs:  
+--Outputs:
+
+--Modification History:
+--Date:     Current Date     Who:    
+--Control:              
+--Description:
+----------------------------------------------------------------------------------------
+
+
+--Original Query:
+  ----DATABASE ${TTMMPPDDBB}
+
+--Translated Query: SUCCESS
+
+    use ${TTMMPPDDBB};
+
+--Original Query:
+  ----DELETE FROM ${AAPPLLIIDD1EENNVV}_install_base_dn_t08 ALL
+
+--Translated Query: SUCCESS
+
+    TRUNCATE TABLE   ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t08;
+
+--Original Query:
+  ----COLLECT STAT ON ${AAPPLLIIDD1EENNVV}_install_base_dn_t07	COLUMN instance_id
+
+--Translated Query: SUCCESS
+
+    ANALYZE TABLE ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t07 COMPUTE STATISTICS  FOR COLUMNS instance_id;
+
+--Original Query:
+  ----COLLECT STAT ON ${AAPPLLIIDD1EENNVV}_install_base_dn_t07	COLUMN order_header_id
+
+--Translated Query: SUCCESS
+
+    ANALYZE TABLE ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t07 COMPUTE STATISTICS  FOR COLUMNS order_header_id;
+
+--Original Query:
+  ----LOCK TABLE ${EEDDWWDDBB2}.sales_order FOR ACCESS                LOCK TABLE ${AAPPLLIIDD1EENNVV}_install_base_dn_t07 FOR ACCESS INSERT INTO ${AAPPLLIIDD1EENNVV}_install_base_dn_t08(      instance_id     ,item_instance_id     ,active_end_date     ,active_start_date     ,actual_return_date     ,actual_ship_date     ,bill_to_site_use_id     ,country_code     ,crnt_loc_cs_fml_org_code     ,external_reference_nbr     ,install_date     ,install_loc_oper_unit_id     ,install_location_id     ,install_location_type_code     ,inventory_item_id     ,inventory_master_org_id     ,item_instance_status_desc     ,item_instance_status_id     ,item_instance_status_name     ,item_instance_tran_code     ,last_order_line_id     ,last_valid_invtry_org_id     ,location_id     ,location_type_code     ,order_header_id     ,order_line_nbr     ,return_by_date     ,service_order_allowed_flag     ,ship_to_site_use_id     ,status_tran_code     ,terminated_flag     ,version_label_date     ,version_label_desc     ,version_label_name     ,vldtn_inventory_org_id     ,vrsn_lbl_tran_code     ,prev_site_nbr     ,service_tier_name,	 esd_flag,                   media_type,                 license_model,              license_start_date,         license_end_date           )SELECT      EDW7.instance_id     ,EDW7.item_instance_id     ,EDW7.active_end_date     ,EDW7.active_start_date     ,EDW7.actual_return_date     ,EDW7.actual_ship_date     ,EDW7.bill_to_site_use_id     ,EDW7.country_code     ,EDW7.crnt_loc_cs_fml_org_code     ,EDW7.external_reference_nbr     ,EDW7.install_date     ,EDW7.install_loc_oper_unit_id     ,EDW7.install_location_id     ,EDW7.install_location_type_code     ,EDW7.inventory_item_id     ,EDW7.inventory_master_org_id     ,EDW7.item_instance_status_desc     ,EDW7.item_instance_status_id     ,EDW7.item_instance_status_name     ,EDW7.item_instance_tran_code     ,EDW7.last_order_line_id     ,EDW7.last_valid_invtry_org_id     ,EDW7.location_id     ,EDW7.location_type_code     ,EDW7.order_header_id     ,EDW7.order_line_nbr     ,EDW7.return_by_date     ,EDW7.service_order_allowed_flag     ,EDW7.ship_to_site_use_id     ,EDW7.status_tran_code     ,EDW7.terminated_flag     ,EDW7.version_label_date     ,EDW7.version_label_desc     ,EDW7.version_label_name     ,EDW7.vldtn_inventory_org_id     ,EDW7.vrsn_lbl_tran_code     ,EDW7.prev_site_nbr     ,EDW7.service_tier_name,	 EDW7.esd_flag,                        EDW7.media_type,                      EDW7.license_model,                   EDW7.license_start_date,              EDW7.license_end_date           FROM  ${AAPPLLIIDD1EENNVV}_install_base_dn_t07 EDW7WHERE EDW7.order_header_id IS NULL
+
+--Translated Query: SUCCESS
+
+    INSERT 
+    INTO
+        TABLE
+        ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t08           SELECT
+            EDW7.instance_id,
+            EDW7.item_instance_id,
+            EDW7.active_end_date,
+            EDW7.active_start_date,
+            EDW7.actual_return_date,
+            EDW7.actual_ship_date,
+            EDW7.bill_to_site_use_id,
+            EDW7.country_code,
+            EDW7.crnt_loc_cs_fml_org_code,
+            null,
+            null,
+            EDW7.external_reference_nbr,
+            EDW7.install_date,
+            EDW7.install_loc_oper_unit_id,
+            EDW7.install_location_id,
+            EDW7.install_location_type_code,
+            EDW7.inventory_item_id,
+            EDW7.inventory_master_org_id,
+            EDW7.item_instance_status_desc,
+            EDW7.item_instance_status_id,
+            EDW7.item_instance_status_name,
+            EDW7.item_instance_tran_code,
+            EDW7.last_order_line_id,
+            EDW7.last_valid_invtry_org_id,
+            EDW7.location_id,
+            EDW7.location_type_code,
+            null,
+            EDW7.order_header_id,
+            EDW7.order_line_nbr,
+            null,
+            EDW7.return_by_date,
+            EDW7.service_order_allowed_flag,
+            EDW7.ship_to_site_use_id,
+            EDW7.status_tran_code,
+            EDW7.terminated_flag,
+            EDW7.version_label_date,
+            EDW7.version_label_desc,
+            EDW7.version_label_name,
+            EDW7.vldtn_inventory_org_id,
+            EDW7.vrsn_lbl_tran_code,
+            EDW7.prev_site_nbr,
+            EDW7.service_tier_name,
+            EDW7.esd_flag,
+            EDW7.media_type,
+            EDW7.license_model,
+            EDW7.license_start_date,
+            EDW7.license_end_date,
+	    EDW7.cit_vendor_code,        
+	    EDW7.mdm_product_identifier, 
+	    EDW7.mdm_solution_identifier
+        FROM
+            ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t07    AS EDW7   
+        WHERE
+            EDW7.order_header_id  IS NULL;
+
+--Original Query:
+  ----INSERT INTO ${AAPPLLIIDD1EENNVV}_install_base_dn_t08(      instance_id     ,item_instance_id     ,active_end_date     ,active_start_date     ,actual_return_date     ,actual_ship_date     ,bill_to_site_use_id     ,country_code     ,crnt_loc_cs_fml_org_code     ,customer_po_date     ,customer_po_nbr     ,external_reference_nbr     ,install_date     ,install_loc_oper_unit_id     ,install_location_id     ,install_location_type_code     ,inventory_item_id     ,inventory_master_org_id     ,item_instance_status_desc     ,item_instance_status_id     ,item_instance_status_name     ,item_instance_tran_code     ,last_order_line_id     ,last_valid_invtry_org_id     ,location_id     ,location_type_code     ,order_date     ,order_header_id     ,order_line_nbr     ,order_nbr     ,return_by_date     ,service_order_allowed_flag     ,ship_to_site_use_id     ,status_tran_code     ,terminated_flag     ,version_label_date     ,version_label_desc     ,version_label_name     ,vldtn_inventory_org_id     ,vrsn_lbl_tran_code     ,prev_site_nbr     ,service_tier_name,	 esd_flag,                        media_type,                      license_model,                   license_start_date,              license_end_date           )SELECT      EDW7.instance_id     ,EDW7.item_instance_id     ,EDW7.active_end_date     ,EDW7.active_start_date     ,EDW7.actual_return_date     ,EDW7.actual_ship_date     ,EDW7.bill_to_site_use_id     ,EDW7.country_code     ,EDW7.crnt_loc_cs_fml_org_code     ,SO.customer_po_date     ,SO.customer_po_nbr     ,EDW7.external_reference_nbr     ,EDW7.install_date     ,EDW7.install_loc_oper_unit_id     ,EDW7.install_location_id     ,EDW7.install_location_type_code     ,EDW7.inventory_item_id     ,EDW7.inventory_master_org_id     ,EDW7.item_instance_status_desc     ,EDW7.item_instance_status_id     ,EDW7.item_instance_status_name     ,EDW7.item_instance_tran_code     ,EDW7.last_order_line_id     ,EDW7.last_valid_invtry_org_id     ,EDW7.location_id     ,EDW7.location_type_code     ,CAST(SO.order_date_time AS DATE)     ,EDW7.order_header_id     ,EDW7.order_line_nbr     ,SO.order_nbr     ,EDW7.return_by_date     ,EDW7.service_order_allowed_flag     ,EDW7.ship_to_site_use_id     ,EDW7.status_tran_code     ,EDW7.terminated_flag     ,EDW7.version_label_date     ,EDW7.version_label_desc     ,EDW7.version_label_name     ,EDW7.vldtn_inventory_org_id     ,EDW7.vrsn_lbl_tran_code     ,EDW7.prev_site_nbr     ,EDW7.service_tier_name,	 EDW7.esd_flag,                        EDW7.media_type,                      EDW7.license_model,                   EDW7.license_start_date,              EDW7.license_end_date           FROM  ${AAPPLLIIDD1EENNVV}_install_base_dn_t07 EDW7LEFT OUTER JOIN${EEDDWWDDBB1}.sales_order SOON  EDW7.instance_id = SO.instance_idAND EDW7.order_header_id = SO.order_header_idAND EDW7.order_header_id IS NOT NULL
+
+--Translated Query: SUCCESS
+
+    INSERT 
+    INTO
+        TABLE
+        ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t08           SELECT
+            EDW7.instance_id,
+            EDW7.item_instance_id,
+            EDW7.active_end_date,
+            EDW7.active_start_date,
+            EDW7.actual_return_date,
+            EDW7.actual_ship_date,
+            EDW7.bill_to_site_use_id,
+            EDW7.country_code,
+            EDW7.crnt_loc_cs_fml_org_code,
+            SO.customer_po_date,
+            SO.customer_po_nbr,
+            EDW7.external_reference_nbr,
+            EDW7.install_date,
+            EDW7.install_loc_oper_unit_id,
+            EDW7.install_location_id,
+            EDW7.install_location_type_code,
+            EDW7.inventory_item_id,
+            EDW7.inventory_master_org_id,
+            EDW7.item_instance_status_desc,
+            EDW7.item_instance_status_id,
+            EDW7.item_instance_status_name,
+            EDW7.item_instance_tran_code,
+            EDW7.last_order_line_id,
+            EDW7.last_valid_invtry_org_id,
+            EDW7.location_id,
+            EDW7.location_type_code,
+            CAST (SO.order_date_time AS date) AS auto_c026,
+            EDW7.order_header_id,
+            EDW7.order_line_nbr,
+            SO.order_nbr,
+            EDW7.return_by_date,
+            EDW7.service_order_allowed_flag,
+            EDW7.ship_to_site_use_id,
+            EDW7.status_tran_code,
+            EDW7.terminated_flag,
+            EDW7.version_label_date,
+            EDW7.version_label_desc,
+            EDW7.version_label_name,
+            EDW7.vldtn_inventory_org_id,
+            EDW7.vrsn_lbl_tran_code,
+            EDW7.prev_site_nbr,
+            EDW7.service_tier_name,
+            EDW7.esd_flag,
+            EDW7.media_type,
+            EDW7.license_model,
+            EDW7.license_start_date,
+            EDW7.license_end_date,
+	    EDW7.cit_vendor_code,        
+	    EDW7.mdm_product_identifier, 
+            EDW7.mdm_solution_identifier
+        FROM
+            ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t07    AS EDW7   
+        LEFT OUTER  JOIN
+            ${EEDDWWDDBB1}.sales_order    AS SO    
+                ON EDW7.instance_id = SO.instance_id  
+                AND EDW7.order_header_id = SO.order_header_id   
+                AND EDW7.order_header_id  IS NOT NULL 
+        LEFt OUTER JOIN
+             ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t08 EDW8
+		on EDW7.instance_id = EDW8.instance_id AND
+		   EDW7.item_instance_id = EDW8.item_instance_id
+	where EDW8.instance_id is null and edw8.item_instance_id is null;
+--Original Query:
+  ----DELETE FROM ${AAPPLLIIDD1EENNVV}_install_base_dn_t05 ALL
+
+--Translated Query: SUCCESS w8c
+
+    -----TRUNCATE TABLE   ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t05;
+
+--Original Query:
+  ----DELETE FROM ${AAPPLLIIDD1EENNVV}_install_base_dn_t05 ALL
+
+--Translated Query: SUCCESS W8c
+
+   ----- TRUNCATE TABLE   ${TTMMPPDDBB}.${AAPPLLIIDD1EENNVV}_install_base_dn_t05;

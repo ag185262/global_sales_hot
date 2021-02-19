@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="install-base-addr-dn-spark-scala-wf">
+   <global>
+     <job-tracker>${job_tracker}</job-tracker>
+     <name-node>${name_node}</name-node>
+     <configuration>
+       <property>
+         <name>tez.queue.name</name>
+         <value>${queue_name}</value>
+       </property>
+       <property>
+         <name>mapreduce.job.queuename</name>
+         <value>${queue_name}</value>
+       </property>
+     </configuration>
+   </global>
+   <credentials>
+     <credential name="cred" type="hcat">
+       <property>
+         <name>hcat.metastore.principal</name>
+         <value>${metastorePrincipal}</value>
+       </property>
+       <property>
+         <name>hcat.metastore.uri</name>
+         <value>${metaStoreUri}</value>
+       </property>
+     </credential>
+   </credentials>
+   <start to="fork_node_0" />
+   <fork name="fork_node_0">
+     <path start="d8-ibase-party-dn-07" />
+     <path start="d8-ibase-party-dn-unc-07" />
+     <path start="d8-ibase-party-dn-11" />
+     <path start="d8-install-base-addr-dn-11" />
+   </fork>
+   <action cred="cred" name="d8-ibase-party-dn-07">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-ibase-party-dn-07</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8ibasepartydn07Runner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-install-base-addr-dn-15a" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-ibase-party-dn-unc-07">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-ibase-party-dn-unc-07</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8ibasepartydnunc07Runner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-install-base-addr-dn-15b" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-ibase-party-dn-11">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-ibase-party-dn-11</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8ibasepartydn11Runner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-ibase-party-dn-12" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-ibase-party-dn-12">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-ibase-party-dn-12</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8ibasepartydn12Runner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-ibase-party-dn-13" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-ibase-party-dn-13">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-ibase-party-dn-13</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8ibasepartydn13Runner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="join_node_0" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-install-base-addr-dn-11">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-install-base-addr-dn-11</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8installbaseaddrdn11Runner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-install-base-addr-dn-12" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-install-base-addr-dn-12">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-install-base-addr-dn-12</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8installbaseaddrdn12Runner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="join_node_0" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-install-base-addr-dn-13">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-install-base-addr-dn-13</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8installbaseaddrdn13Runner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-install-base-addr-dn-14a" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-install-base-addr-dn-14a">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-install-base-addr-dn-14a</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8installbaseaddrdn14aRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-install-base-addr-dn-14b" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-install-base-addr-dn-14b">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-install-base-addr-dn-14b</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8installbaseaddrdn14bRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-install-base-addr-dn-15-1" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-install-base-addr-dn-15a">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-install-base-addr-dn-15a</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8installbaseaddrdn15aRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="join_node_0" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-install-base-addr-dn-15b">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-install-base-addr-dn-15b</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8installbaseaddrdn15bRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="join_node_0" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-install-base-addr-dn-15-1">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-install-base-addr-dn-15-1</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8installbaseaddrdn151Runner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-install-base-addr-dn-15-2" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-install-base-addr-dn-15-2">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-install-base-addr-dn-15-2</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8installbaseaddrdn152Runner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-install-base-addr-dn-15" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-install-base-addr-dn-15">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-install-base-addr-dn-15</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8installbaseaddrdn15Runner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-install-base-addr-dn-16" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-install-base-addr-dn-16">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-install-base-addr-dn-16</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8installbaseaddrdn16Runner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-install-base-addr-dn-17" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-install-base-addr-dn-17">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-install-base-addr-dn-17</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8installbaseaddrdn17Runner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-install-base-addr-dn-18" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-install-base-addr-dn-18">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-install-base-addr-dn-18</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8installbaseaddrdn18Runner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-install-base-addr-dn-19" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-install-base-addr-dn-19">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-install-base-addr-dn-19</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8installbaseaddrdn19Runner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-install-base-addr-dn-20" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-install-base-addr-dn-20">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-install-base-addr-dn-20</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8installbaseaddrdn20Runner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-install-base-addr-dn-21" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-install-base-addr-dn-21">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-install-base-addr-dn-21</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8installbaseaddrdn21Runner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-install-base-addr-dn-22" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-install-base-addr-dn-22">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-install-base-addr-dn-22</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8installbaseaddrdn22Runner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-install-base-addr-dn-23" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-install-base-addr-dn-23">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-install-base-addr-dn-23</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8installbaseaddrdn23Runner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-install-base-addr-dn-24" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-install-base-addr-dn-24">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-install-base-addr-dn-24</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8installbaseaddrdn24Runner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-install-base-addr-dn-25" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-install-base-addr-dn-25">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-install-base-addr-dn-25</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8installbaseaddrdn25Runner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-install-base-addr-dn-26" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-install-base-addr-dn-26">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-install-base-addr-dn-26</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8installbaseaddrdn26Runner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-install-base-addr-dn-27" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-install-base-addr-dn-27">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-install-base-addr-dn-27</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8installbaseaddrdn27Runner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-install-base-addr-dn-ld-1" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-install-base-addr-dn-ld-1">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-install-base-addr-dn-ld-1</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8installbaseaddrdnld1Runner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-install-base-addr-dn" />
+     <error to="fail" />
+   </action>
+   <action cred="cred" name="d8-install-base-addr-dn">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-install-base-addr-dn</name>    
+       <class>com.ncr.edl.apollo.install_base_addr_dn.d8installbaseaddrdnRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="end" />
+     <error to="fail" />
+   </action>
+   <join name="join_node_0" to="d8-install-base-addr-dn-13" />
+   <kill name="fail">
+      <message>Error while running workflow install-base-addr-dn-spark-scala-wf workflow: [${wf:errorMessage(wf:lastErrorNode())}]</message>
+   </kill>
+   <end name="end" />
+</workflow-app>

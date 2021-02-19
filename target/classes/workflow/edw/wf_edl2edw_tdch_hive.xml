@@ -1,0 +1,109 @@
+<workflow-app xmlns="uri:oozie:workflow:0.5" name="wf_edl2edw_tdch_hive.xml">
+
+    <global>
+        <job-tracker>${jobTracker}</job-tracker>
+        <name-node>${nameNode}</name-node>
+        <configuration>
+            <property>
+                <name>tez.queue.name</name>
+                <value>${queueName}</value>
+            </property>
+            <property>
+                <name>mapreduce.job.queuename</name>
+                <value>${queueName}</value>
+            </property>
+        </configuration>
+    </global>
+
+    <credentials>
+        <credential name="hs2_credentials" type="hive2">
+            <property>
+                <name>hive2.server.principal</name>
+                <value>${jdbcPrincipal}</value>
+            </property>
+            <property>
+                <name>hive2.jdbc.url</name>
+                <value>${jdbcURL}</value>
+            </property>
+        </credential>
+    </credentials>
+
+    <start to="edl2edw-tdch-hive-hs2-parquet2text"/>
+
+    <action name="edl2edw-tdch-hive-hs2-parquet2text" cred="hs2_credentials">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+            <jdbc-url>${jdbcURL}</jdbc-url>
+            <script>${codeBaseDir}/transformation/edw/edl2edw_tdch_hive.hql</script>
+                <param>HIVE_SOURCE_TABLE=${HIVE_SOURCE_TABLE}</param>
+                <param>INSERT_OVERWRITE_TABLE=${INSERT_OVERWRITE_TABLE}</param>
+                <argument>-hiveconf</argument>
+                <argument>hive.tez.container.size=${containerSize}</argument>
+                <argument>-hiveconf</argument>
+                <argument>hive.tez.java.opts=${heapSize}</argument>
+        </hive2>
+        <ok to="edl2edw-tdch-hive-shell"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+
+    <action name="edl2edw-tdch-hive-shell">
+        <shell xmlns="uri:oozie:shell-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <configuration>
+                <property>
+                    <name>mapred.job.queue.name</name>
+                    <value>${queueName}</value>
+                </property>
+            </configuration>
+            <exec>${codeBaseDir}/script/edl2edw_tdch_hive.sh</exec>
+            <argument>${TD_JDBC_URL}</argument>
+            <argument>${TD_USER_NAME}</argument>
+            <argument>${TD_PASSWORD}</argument>
+            <argument>${TD_TGT_TABLE}</argument>
+            <argument>${TD_MAPPERS}</argument>
+            <argument>${INSERT_OVERWRITE_TABLE}</argument>
+            <argument>${METHOD}</argument>
+            <argument>${KEYTAB_USER}</argument>
+            <argument>${queueName}</argument>
+            <file>${codeBaseDir}/script/edl2edw_tdch_hive.sh#edl2edw_tdch_hive.sh</file>
+            <file>${codeBaseDir}/lib/teradata-connector-1.5.9.jar#teradata-connector-1.5.9.jar</file>
+            <file>${codeBaseDir}/lib/tdgssconfig.jar#tdgssconfig.jar</file>
+            <file>${codeBaseDir}/lib/terajdbc4.jar#terajdbc4.jar</file>
+            <file>${codeBaseDir}/lib/hive-cli.jar#hive-cli.jar</file>
+            <file>${codeBaseDir}/lib/hive-exec.jar#hive-exec.jar</file>
+            <file>${codeBaseDir}/lib/hive-metastore.jar#hive-metastore.jar</file>
+            <file>${codeBaseDir}/lib/parquet-hadoop-bundle-1.8.1.jar#parquet-hadoop-bundle-1.8.1.jar</file>
+            <file>${codeBaseDir}/lib/antlr-runtime-3.4.jar#antlr-runtime-3.4.jar</file>
+            <file>${codeBaseDir}/lib/commons-dbcp-1.4.jar#commons-dbcp-1.4.jar</file>
+            <file>${codeBaseDir}/lib/commons-pool-1.5.4.jar#commons-pool-1.5.4.jar</file>
+            <file>${codeBaseDir}/lib/datanucleus-api-jdo-4.2.1.jar#datanucleus-api-jdo-4.2.1.jar</file>
+            <file>${codeBaseDir}/lib/datanucleus-core-4.1.6.jar#datanucleus-core-4.1.6.jar</file>
+            <file>${codeBaseDir}/lib/datanucleus-rdbms-4.1.7.jar#datanucleus-rdbms-4.1.7.jar</file>
+            <file>${codeBaseDir}/lib/jdo-api-3.0.1.jar#jdo-api-3.0.1.jar</file>
+            <file>${codeBaseDir}/lib/libfb303-0.9.3.jar#libfb303-0.9.3.jar</file>
+            <file>${codeBaseDir}/lib/libthrift-0.9.3.jar#libthrift-0.9.3.jar</file>
+            <file>${codeBaseDir}/lib/hive-hcatalog-core-1.2.1000.2.6.5.1153-2.jar#hive-hcatalog-core-1.2.1000.2.6.5.1153-2.jar</file>
+            <file>${codeBaseDir}/lib/hive-conf#hive-conf</file>
+            </shell>
+        <ok to="end"/>
+        <error to="Email-On-Fail"/>
+    </action>
+
+     <action name="Email-On-Fail">
+        <email xmlns="uri:oozie:email-action:0.2">
+            <to>${JOB_FAIL_EMAIL_LIST}</to>
+            <subject>PRD01 Job Failed : ${wf:name()} </subject>
+            <body>Workflow Action Failed, ${wf:id()}  Error Message :[${wf:errorMessage(wf:lastErrorNode())}]</body>
+        </email>
+        <ok to="kill"/>
+        <error to="kill"/>
+    </action>
+
+    <kill name="kill">
+        <message>Action Failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+    </kill>
+
+    <end name="end"/>
+
+</workflow-app>

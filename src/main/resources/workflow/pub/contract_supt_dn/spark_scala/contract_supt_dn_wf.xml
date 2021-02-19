@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="contract-supt-dn-spark-scala-wf">
+	<global>
+		<job-tracker>${job_tracker}</job-tracker>
+		<name-node>${name_node}</name-node>
+		<configuration>
+			<property>
+				<name>tez.queue.name</name>
+				<value>${queue_name}</value>
+			</property>
+			<property>
+				<name>mapreduce.job.queuename</name>
+				<value>${queue_name}</value>
+			</property>
+		</configuration>
+	</global>
+	<credentials>
+		<credential name="cred" type="hcat">
+			<property>
+				<name>hcat.metastore.uri</name>
+				<value>${metaStoreUri}</value>
+			</property>
+			<property>
+				<name>hcat.metastore.principal</name>
+				<value>${metastorePrincipal}</value>
+			</property>
+		</credential>
+	</credentials>
+	<start to="fork_node_1"/>
+	<fork name="fork_node_1">
+		<path start="d8-prep-month-calc-t1" />
+		<path start="d8-contr-supt-dn-bill-strm-t1" />
+	</fork>
+	<action cred="cred" name="d8-prep-month-calc-t1">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8_prep_month_calc_t1</name>    
+			<class>com.ncr.edl.apollo.contract_supt_dn.d8prepmonthcalct1Runner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg> ${activityCountRequired}</arg>
+		</spark>
+		<ok to="join_node_1" />
+		<error to="fail" />
+	</action>
+	<action cred="cred" name="d8-contr-supt-dn-bill-strm-t1">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8_contr_supt_dn_bill_strm_t1</name>    
+			<class>com.ncr.edl.apollo.contract_supt_dn.d8contrsuptdnbillstrmt1Runner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg> ${activityCountRequired}</arg>
+		</spark>
+		<ok to="join_node_1" />
+		<error to="fail" />
+	</action>
+	<action cred="cred" name="d8-contract-supt-dn-t16">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8_contract_supt_dn_t16</name>    
+			<class>com.ncr.edl.apollo.contract_supt_dn.d8contractsuptdnt16Runner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg> ${activityCountRequired}</arg>
+		</spark>
+		<ok to="d8-contract-supt-dn" />
+		<error to="fail" />
+	</action>
+	<action cred="cred" name="d8-contract-supt-dn">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8_contract_supt_dn</name>    
+			<class>com.ncr.edl.apollo.contract_supt_dn.d8contractsuptdnRunner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg> ${activityCountRequired}</arg>
+		</spark>
+		<ok to="end" />
+		<error to="fail" />
+	</action>
+	<join name="join_node_1" to="d8-contract-supt-dn-t16" />
+	<kill name="fail">
+		<message>Error in execution of contract-supt-dn-spark-scala-wf workflow: [${wf:errorMessage(wf:lastErrorNode())}]</message>
+	</kill>
+	<end name="end"/>
+</workflow-app>

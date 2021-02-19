@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="install-base-dn-pyspark-wf">
+   <global>
+      <job-tracker>${jobTracker}</job-tracker>
+      <name-node>${nameNode}</name-node>
+      <configuration>
+         <property>
+            <name>tez.queue.name</name>
+            <value>${queueName}</value>
+         </property>
+         <property>
+            <name>mapreduce.job.queuename</name>
+            <value>${queueName}</value>
+         </property>
+      </configuration>
+   </global>
+
+  <credentials>
+		<credential name="prd-cert" type="hcat">
+            <property>
+                <name>hcat.metastore.uri</name>
+                <value>${metaStoreUri}</value>
+            </property>
+            <property>
+                <name>hcat.metastore.principal</name>
+                <value>${jdbcPrincipal}</value>
+            </property>
+        </credential>
+	</credentials>
+   
+   <start to="fork-node"/>
+
+	<fork name="fork-node">
+		<path start = "D8-Install-base-vrsn-lbl"/>
+		<path start = "D8-Install-base-item-sts"/>
+		<path start = "D8-Es-slm-class"/>
+		<path start = "D8-Cfs-attribute-value"/>
+		<path start = "D8-Cfs-extended-attribute-ld"/>
+		<path start = "D8-Install-Base-item"/>
+		<path start = "D8-Instal-Base-item-hist"/>
+		<path start = "D8-Install-base-plg"/>
+	</fork>
+	  
+   <action cred="prd-cert" name="D8-Install-base-vrsn-lbl">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>D8_Install_base_vrsn_lbl_merged</name>
+            <jar>D8_Install_base_vrsn_lbl_merged.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+      <ok to="join-node" />
+      <error to="fail" />
+   </action>
+   
+   <action cred="prd-cert" name="D8-Install-base-item-sts">
+      <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>D8_Install_base_item_sts_merged</name>
+            <jar>D8_Install_base_item_sts_merged.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+      <ok to="join-node" />
+      <error to="fail" />
+   </action>
+   
+   <action cred="prd-cert" name="D8-Es-slm-class">
+      <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>D8_Es_slm_class_merged</name>
+            <jar>D8_Es_slm_class_merged.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+      <ok to="join-node" />
+      <error to="fail" />
+   </action>
+   
+   <action cred="prd-cert" name="D8-Cfs-attribute-value">
+      <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>D8_Cfs_attribute_value_merged</name>
+            <jar>D8_Cfs_attribute_value_merged.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+      <ok to="join-node" />
+      <error to="fail" />
+   </action>
+   
+   <action cred="prd-cert" name="D8-Cfs-extended-attribute-ld">
+      <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>D8_Cfs_extended_attribute_ld</name>
+            <jar>D8_Cfs_extended_attribute_ld.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+      <ok to="join-node" />
+      <error to="fail" />
+   </action>
+   
+   <action cred="prd-cert" name="D8-Install-Base-item">
+      <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>D8_Install_Base_item_merged</name>
+            <jar>D8_Install_Base_item_merged.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+      <ok to="join-node" />
+      <error to="fail" />
+   </action>
+   
+   <action cred="prd-cert" name="D8-Instal-Base-item-hist">
+      <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>D8_Instal_Base_item_hist_merged</name>
+            <jar>D8_Instal_Base_item_hist_merged.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+      <ok to="join-node" />
+      <error to="fail" />
+   </action>
+   
+   <action cred="prd-cert" name="D8-Install-base-plg">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>D8_Install_base_plg_merged</name>
+            <jar>D8_Install_base_plg_merged.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+      <ok to="join-node" />
+      <error to="fail" />
+   </action>
+   
+   <action cred="prd-cert" name="D8-Install-base-dn-ld-25">
+      <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>D8_Install_base_dn_ld_25_merged</name>
+            <jar>D8_Install_base_dn_ld_25_merged.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+      <ok to="D8-Install-base-dn-ld-25-1" />
+      <error to="fail" />
+   </action>
+   
+   <action cred="prd-cert" name="D8-Install-base-dn-ld-25-1">
+      <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>D8_Install_base_dn_ld_25_1_merged</name>
+            <jar>D8_Install_base_dn_ld_25_1_merged.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+      <ok to="D8-Install-base-dn-26-ld" />
+      <error to="fail" />
+   </action>
+   
+   <action cred="prd-cert" name="D8-Install-base-dn-26-ld">
+      <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${master}</master>
+            <mode>${mode}</mode>
+            <name>D8_Install_base_dn_26_ld</name>
+            <jar>D8_Install_base_dn_26_ld.py</jar>
+            <spark-opts>
+			 --queue ${queueName} --py-files ${py_file} --properties-file user.properties ${sparkConfCustom}
+            </spark-opts>
+        </spark>
+      <ok to="end" />
+      <error to="fail" />
+   </action>
+   
+   <join name="join-node" to="D8-Install-base-dn-ld-25" />
+   
+   <action name="save_log_file">
+      <shell xmlns="uri:oozie:shell-action:0.2">
+         <job-tracker>${jobTracker}</job-tracker>
+         <name-node>${nameNode}</name-node>
+         <exec>save_log.sh</exec>
+         <file>${saveLogScriptPath}/save_log.sh</file>
+      </shell>
+      <ok to="end" />
+      <error to="fail" />
+   </action>
+   
+   <kill name="fail">
+      <message>Error in execution of install_base_dn workflow</message>
+   </kill>
+   
+   <end name="end" />
+   
+</workflow-app>

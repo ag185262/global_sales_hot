@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="ml2base-common-wf-1">
+	<global>
+		<job-tracker>${job_tracker}</job-tracker>
+		<name-node>${name_node}</name-node>
+		<configuration>
+			<property>
+				<name>tez.queue.name</name>
+				<value>${queue_name}</value>
+			</property>
+			<property>
+				<name>mapreduce.job.queuename</name>
+				<value>${queue_name}</value>
+			</property>
+		</configuration>
+	</global>
+	<credentials>
+		<credential name="cred" type="hcat">
+			<property>
+				<name>hcat.metastore.uri</name>
+				<value>${metaStoreUri}</value>
+			</property>
+			<property>
+				<name>hcat.metastore.principal</name>
+				<value>${metastorePrincipal}</value>
+			</property>
+		</credential>
+	</credentials>
+	<start to="fork-node-1"/>
+	<fork name="fork-node-1">		
+		<path start = "d8-contract-header-base"/>
+		<path start = "d8-contract-line-base"/>
+		<path start = "d8-contract-revn-dist-base" />
+		<path start = "d8t-contr-action-time-base" />								
+		<path start = "wo-header-1-base"/>
+		<path start = "wo-header-2-base"/>
+		<path start = "wo-part-base" />
+		<path start = "d8-contract-list-header-lk-base" />
+		<path start = "d8-contract-object-xref-base" />
+		<path start = "d8-contract-header-lk-base" />
+		<path start = "d8-contract-line-lk-base" />
+		<path start = "d8-contr-line-svc-supp-lk-base" />
+		<path start = "d8-contract-list-header-base" />
+		<path start = "d8t-contr-coverage-time-base" />
+		<path start = "d8t-contr-cover-timezone-base" />
+		<path start = "d8-incident-severity-base" />		
+		<path start = "d8-incident-severity-lk-base" />
+		<path start = "d8-business-process-base" />
+		<path start = "d8-es-contr-coverage-unc-base" />
+	</fork>
+	
+	<action cred="cred" name="d8-contract-header-base">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8_contract_header_base</name>
+			<class>com.ncr.edl.apollo.contract_dn.d8contractheaderbaseRunner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="d8-curr-calc-country-lkp"/>
+		<error to="fail"/>
+	</action>
+	<action cred="cred" name="d8-curr-calc-country-lkp">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8_curr_calc_country_lkp</name>
+			<class>com.ncr.edl.apollo.contract_dn.d8currcalccountrylkpRunner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="join-node-1"/>
+		<error to="fail"/>
+	</action>
+	<action cred="cred" name="d8-contract-line-base">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8_contract_line_base</name>
+			<class>com.ncr.edl.apollo.contract_dn.d8contractlinebaseRunner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="join-node-1"/>
+		<error to="fail"/>
+	</action>
+	<action cred="cred" name="d8-contract-revn-dist-base">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8_contract_revn_dist_base</name>
+			<class>com.ncr.edl.apollo.contract_dn.d8contractrevndistbaseRunner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="join-node-1"/>
+		<error to="fail"/>
+	</action>
+	<action cred="cred" name="wo-header-1-base">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>wo-header-1-base</name>
+			<class>com.ncr.edl.apollo.es_ppm_period_action_dn_ht.woheader1baseRunner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="join-node-1"/>
+		<error to="fail"/>
+	</action>
+	<action cred="cred" name="wo-header-2-base">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>wo-header-2-base</name>
+			<class>com.ncr.edl.apollo.es_ppm_period_action_dn_ht.woheader2baseRunner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="join-node-1"/>
+		<error to="fail"/>
+	</action>
+	<action cred="cred" name="wo-part-base">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>wo-part-base</name>
+			<class>com.ncr.edl.apollo.es_ppm_period_action_dn_ht.wopartbaseRunner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="join-node-1"/>
+		<error to="fail"/>
+	</action>
+	
+	<action cred="cred" name="d8-contract-list-header-base">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8-contract-list-header-base</name>    
+			<class>com.ncr.edl.apollo.contract_supt_dn.d8contractlistheaderbaseRunner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg> ${activityCountRequired}</arg>
+		</spark>
+		<ok to="join-node-1" />
+		<error to="fail" />
+	</action>
+	<action cred="cred" name="d8-contract-object-xref-base">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8-contract-object-xref-base</name>    
+			<class>com.ncr.edl.apollo.contract_supt_dn.d8contractobjectxrefbaseRunner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg> ${activityCountRequired}</arg>
+		</spark>
+		<ok to="join-node-1" />
+		<error to="fail" />
+	</action>
+	
+	<action cred="cred" name="d8-contract-header-lk-base">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8-contract-header-lk-base</name>    
+			<class>com.ncr.edl.apollo.contract_supt_dn.d8contractheaderlkbaseRunner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg> ${activityCountRequired}</arg>
+		</spark>
+		<ok to="join-node-1" />
+		<error to="fail" />
+	</action>
+	<action cred="cred" name="d8-contract-line-lk-base">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8-contract-line-lk-base</name>    
+			<class>com.ncr.edl.apollo.contract_supt_dn.d8contractlinelkbaseRunner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg> ${activityCountRequired}</arg>
+		</spark>
+		<ok to="join-node-1" />
+		<error to="fail" />
+	</action>
+	<action cred="cred" name="d8-contr-line-svc-supp-lk-base">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8-contract-line-svc-supp-lk-base</name>    
+			<class>com.ncr.edl.apollo.contract_supt_dn.d8contractlinesvcsupplkbaseRunner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg> ${activityCountRequired}</arg>
+		</spark>
+		<ok to="join-node-1" />
+		<error to="fail" />
+	</action>
+	<action cred="cred" name="d8-contract-list-header-lk-base">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8-contract-list-header-lk-base</name>    
+			<class>com.ncr.edl.apollo.contract_supt_dn.d8contractlistheaderlkbaseRunner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg> ${activityCountRequired}</arg>
+		</spark>
+		<ok to="join-node-1" />
+		<error to="fail" />
+	</action>
+	
+	<action cred="cred" name="d8t-contr-coverage-time-base">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8t-contr-coverage-time-base</name>    
+			<class>com.ncr.edl.apollo.contract_coverage_dn.d8contrcoveragetimebaseRunner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="join-node-1" />
+		<error to="fail" />
+	</action>
+	<action cred="cred" name="d8t-contr-action-time-base">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8t-contr-action-time-base</name>    
+			<class>com.ncr.edl.apollo.contract_coverage_dn.d8contractiontimebaseRunner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="d8-contr-action-time-type-base" />
+		<error to="fail" />
+	</action>
+	<action cred="cred" name="d8-contr-action-time-type-base">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8-contr-action-time-type-base</name>    
+			<class>com.ncr.edl.apollo.contract_coverage_dn.d8contractiontimetypebaseRunner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="join-node-1" />
+		<error to="fail" />
+	</action>	
+	<action cred="cred" name="d8t-contr-cover-timezone-base">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8t-contr-cover-timezone-base</name>
+			<class>com.ncr.edl.apollo.contract_coverage_dn.d8contrcovertimezonebaseRunner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="join-node-1"/>
+		<error to="fail"/>
+	</action>
+	<action cred="cred" name="d8-incident-severity-base">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8-incident-severity-base</name>    
+			<class>com.ncr.edl.apollo.contract_coverage_dn.d8incidentseveritybaseRunner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="join-node-1" />
+		<error to="fail" />
+	</action>
+	<action cred="cred" name="d8-incident-severity-lk-base">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8-incident-severity-lk-base</name>
+			<class>com.ncr.edl.apollo.contract_coverage_dn.d8incidentseveritylkbaseRunner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="join-node-1"/>
+		<error to="fail"/>
+	</action>
+	<action cred="cred" name="d8-business-process-base">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8-business-process-base</name>
+			<class>com.ncr.edl.apollo.contract_coverage_dn.d8businessprocessbaseRunner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="join-node-1"/>
+		<error to="fail"/>
+	</action>
+	<action cred="cred" name="d8-es-contr-coverage-unc-base">
+     <spark xmlns="uri:oozie:spark-action:0.2">
+       <job-tracker>${job_tracker}</job-tracker>
+       <name-node>${name_node}</name-node>
+       <master>${master}</master>
+       <mode>${mode}</mode>
+       <name>d8-es-contr-coverage-unc-base</name>    
+       <class>com.ncr.edl.apollo.contract_coverage_dn.d8escontrcoverageuncbaseRunner</class>
+       <jar>${jarHDFSPath}</jar>
+       <spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+       <arg>${dbParamFileHDFSPath}</arg>
+       <arg> ${activityCountRequired}</arg>
+     </spark>
+     <ok to="d8-es-contract-coverage-base" />
+     <error to="fail" />
+   </action>
+	<action cred="cred" name="d8-es-contract-coverage-base">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8-es-contract-coverage-base</name>
+			<class>com.ncr.edl.apollo.contract_coverage_dn.d8escontractcoveragebaseRunner</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties ${sparkConfCustom}</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="join-node-1"/>
+		<error to="fail"/>
+	</action>
+	
+	<join name = "join-node-1" to = "end"/>
+	
+	<kill name="fail">
+		<message>Error in execution of ml2base-common-wf-1 workflow: [${wf:errorMessage(wf:lastErrorNode())}]</message>
+	</kill>
+	<end name="end"/>
+</workflow-app>

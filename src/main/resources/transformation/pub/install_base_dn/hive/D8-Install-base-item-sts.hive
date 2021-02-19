@@ -1,0 +1,2 @@
+!run ./hive_init.hql
+!run ./D8_Install_base_item_sts_merged.hql

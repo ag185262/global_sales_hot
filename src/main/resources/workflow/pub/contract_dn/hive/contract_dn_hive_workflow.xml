@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="contract-dn-hive-wf">
+	<global>
+		<job-tracker>${jobTracker}</job-tracker>
+	    <name-node>${nameNode}</name-node>
+	    <configuration>
+	      	<property>
+	        	<name>tez.queue.name</name>
+        		<value>${queueName}</value>
+	      	</property>
+	      	<property>
+	        	<name>mapreduce.job.queuename</name>
+        		<value>${queueName}</value>
+	      	</property>
+	    </configuration>
+	</global>
+
+	<credentials>
+		<credential name="prd_cert" type="hive2">
+			<property>
+				<name>hive2.jdbc.url</name>
+                <value>${jdbcURL}</value>
+			</property>
+	        <property>
+              	<name>hive2.server.principal</name>
+        	    <value>${jdbcPrincipal}</value>
+	        </property>
+        </credential>
+	</credentials>
+
+	<start to="fork-node"/>
+
+	<fork name="fork-node">
+		<path start = "d8-contract-header"/>
+		<path start = "d8-contract-line"/>
+		<path start = "d8-contract-revn-dist"/>
+	</fork>
+
+	<action cred="prd_cert" name="d8-contract-header">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+                <jdbc-url>${jdbcURL}</jdbc-url>
+                <script>${appPath}/transformation/pub/contract_dn/hive/d8_contract_header.hive</script>
+		</hive2>
+        <ok to="d8-curr-calc-country"/>
+        <error to="fail"/>
+	</action>
+
+	<action cred="prd_cert" name="d8-contract-line">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+                <jdbc-url>${jdbcURL}</jdbc-url>
+                <script>${appPath}/transformation/pub/contract_dn/hive/d8_contract_line.hive</script>
+		</hive2>
+        <ok to="join-node"/>
+        <error to="fail"/>
+	</action>
+
+	<action cred="prd_cert" name="d8-contract-revn-dist">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+                <jdbc-url>${jdbcURL}</jdbc-url>
+                <script>${appPath}/transformation/pub/contract_dn/hive/d8_contract_revn_dist.hive</script>
+		</hive2>
+        <ok to="join-node"/>
+        <error to="fail"/>
+	</action>
+
+	<action cred="prd_cert" name="d8-curr-calc-country">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+                <jdbc-url>${jdbcURL}</jdbc-url>
+                <script>${appPath}/transformation/pub/contract_dn/hive/d8_curr_calc_country.hive</script>
+		</hive2>
+        <ok to="join-node"/>
+        <error to="fail"/>
+	</action>
+
+	<action cred="prd_cert" name="d8-contract-dn">
+        <hive2 xmlns="uri:oozie:hive2-action:0.2">
+                <jdbc-url>${jdbcURL}</jdbc-url>
+                <script>${appPath}/transformation/pub/contract_dn/hive/d8_contract_dn.hive</script>
+		</hive2>
+        <ok to="end"/>
+        <error to="fail"/>
+    </action>
+
+	<join name = "join-node" to = "d8-contract-dn"/>
+	
+	<action name="save_log_file">
+		<shell xmlns="uri:oozie:shell-action:0.2">
+			<job-tracker>${jobTracker}</job-tracker>
+			<name-node>${nameNode}</name-node>
+			<exec>save_log.sh</exec>
+			<file>${saveLogScriptPath}/save_log.sh</file>
+		</shell>
+		<ok to="end"/>
+		<error to="fail"/>
+	</action>
+
+	<kill name="fail">
+        	<message>Error in execution of contract_dn workflow</message>
+	</kill>
+	
+	<end name="end"/>
+	
+</workflow-app>

@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow-app xmlns="uri:oozie:workflow:0.4"
+	name="es-sdi-cust-site-asset-dn-spark-scala-wf">
+	<global>
+		<job-tracker>${job_tracker}</job-tracker>
+		<name-node>${name_node}</name-node>
+		<configuration>
+			<property>
+				<name>tez.queue.name</name>
+				<value>${queue_name}</value>
+			</property>
+			<property>
+				<name>mapreduce.job.queuename</name>
+				<value>${queue_name}</value>
+			</property>
+		</configuration>
+	</global>
+	<credentials>
+		<credential name="cred" type="hcat">
+			<property>
+				<name>hcat.metastore.principal</name>
+				<value>${metastorePrincipal}</value>
+			</property>
+			<property>
+				<name>hcat.metastore.uri</name>
+				<value>${metaStoreUri}</value>
+			</property>
+		</credential>
+	</credentials>
+	<start to="d8-es-sdi-cust-site-asset-dn-pt1-ins" />
+	<action cred="cred" name="d8-es-sdi-cust-site-asset-dn-pt1-ins">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<configuration>
+				<property>
+					<name>oozie.launcher.mapreduce.map.memory.mb</name>
+					<value>${oozieLauncherMapreduceMapMemoryMb}</value>
+				</property>
+				<property>
+					<name>mapreduce.map.memory.mb</name>
+					<value>${mapreduceMapMemoryMb}</value>
+				</property>
+				<property>
+					<name>oozie.launcher.mapred.child.java.opts</name>
+					<value>${oozieLauncherMapredChildJavaOpts}</value>
+				</property>
+			</configuration>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8-es-sdi-cust-site-asset-dn-pt1-ins</name>
+			<class>com.ncr.edl.apollo.es_sdi_cust_site_asset_dn.d8essdicustsiteassetdnpt1insRunner
+			</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties
+				${sparkConfCustom}
+			</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="d8-es-sdi-cust-site-asset-dn-pt2-ins" />
+		<error to="fail" />
+	</action>
+	<action cred="cred" name="d8-es-sdi-cust-site-asset-dn-pt2-ins">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<configuration>
+				<property>
+					<name>oozie.launcher.mapreduce.map.memory.mb</name>
+					<value>${oozieLauncherMapreduceMapMemoryMb}</value>
+				</property>
+				<property>
+					<name>mapreduce.map.memory.mb</name>
+					<value>${mapreduceMapMemoryMb}</value>
+				</property>
+				<property>
+					<name>oozie.launcher.mapred.child.java.opts</name>
+					<value>${oozieLauncherMapredChildJavaOpts}</value>
+				</property>
+			</configuration>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8-es-sdi-cust-site-asset-dn-pt2-ins</name>
+			<class>com.ncr.edl.apollo.es_sdi_cust_site_asset_dn.d8essdicustsiteassetdnpt2insRunner
+			</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties
+				${sparkConfCustom}
+			</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="d8-es-sdi-cust-site-asset-dn-pt2a-ins" />
+		<error to="fail" />
+	</action>
+	<action cred="cred" name="d8-es-sdi-cust-site-asset-dn-pt2a-ins">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<configuration>
+				<property>
+					<name>oozie.launcher.mapreduce.map.memory.mb</name>
+					<value>${oozieLauncherMapreduceMapMemoryMb}</value>
+				</property>
+				<property>
+					<name>mapreduce.map.memory.mb</name>
+					<value>${mapreduceMapMemoryMb}</value>
+				</property>
+				<property>
+					<name>oozie.launcher.mapred.child.java.opts</name>
+					<value>${oozieLauncherMapredChildJavaOpts}</value>
+				</property>
+			</configuration>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8-es-sdi-cust-site-asset-dn-pt2a-ins</name>
+			<class>com.ncr.edl.apollo.es_sdi_cust_site_asset_dn.d8essdicustsiteassetdnpt2ainsRunner
+			</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties
+				${sparkConfCustom}
+			</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="d8-es-sdi-cust-site-asset-dn-pt3-ins" />
+		<error to="fail" />
+	</action>
+	<action cred="cred" name="d8-es-sdi-cust-site-asset-dn-pt3-ins">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<configuration>
+				<property>
+					<name>oozie.launcher.mapreduce.map.memory.mb</name>
+					<value>${oozieLauncherMapreduceMapMemoryMb}</value>
+				</property>
+				<property>
+					<name>mapreduce.map.memory.mb</name>
+					<value>${mapreduceMapMemoryMb}</value>
+				</property>
+				<property>
+					<name>oozie.launcher.mapred.child.java.opts</name>
+					<value>${oozieLauncherMapredChildJavaOpts}</value>
+				</property>
+			</configuration>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8-es-sdi-cust-site-asset-dn-pt3-ins</name>
+			<class>com.ncr.edl.apollo.es_sdi_cust_site_asset_dn.d8essdicustsiteassetdnpt3insRunner
+			</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties
+				${sparkConfCustom}
+			</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="d8-es-sdi-cust-site-asset-dn-pt3a-ins" />
+		<error to="fail" />
+	</action>
+	<action cred="cred" name="d8-es-sdi-cust-site-asset-dn-pt3a-ins">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<configuration>
+				<property>
+					<name>oozie.launcher.mapreduce.map.memory.mb</name>
+					<value>${oozieLauncherMapreduceMapMemoryMb}</value>
+				</property>
+				<property>
+					<name>mapreduce.map.memory.mb</name>
+					<value>${mapreduceMapMemoryMb}</value>
+				</property>
+				<property>
+					<name>oozie.launcher.mapred.child.java.opts</name>
+					<value>${oozieLauncherMapredChildJavaOpts}</value>
+				</property>
+			</configuration>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8-es-sdi-cust-site-asset-dn-pt3a-ins</name>
+			<class>com.ncr.edl.apollo.es_sdi_cust_site_asset_dn.d8essdicustsiteassetdnpt3ainsRunner
+			</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties
+				${sparkConfCustom}
+			</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="d8-es-sdi-cust-site-asset-dn-pt4-ins" />
+		<error to="fail" />
+	</action>
+	<action cred="cred" name="d8-es-sdi-cust-site-asset-dn-pt4-ins">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<configuration>
+				<property>
+					<name>oozie.launcher.mapreduce.map.memory.mb</name>
+					<value>${oozieLauncherMapreduceMapMemoryMb}</value>
+				</property>
+				<property>
+					<name>mapreduce.map.memory.mb</name>
+					<value>${mapreduceMapMemoryMb}</value>
+				</property>
+				<property>
+					<name>oozie.launcher.mapred.child.java.opts</name>
+					<value>${oozieLauncherMapredChildJavaOpts}</value>
+				</property>
+			</configuration>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8-es-sdi-cust-site-asset-dn-pt4-ins</name>
+			<class>com.ncr.edl.apollo.es_sdi_cust_site_asset_dn.d8essdicustsiteassetdnpt4insRunner
+			</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties
+				${sparkConfCustom}
+			</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="d8-es-sdi-cust-site-asset-dn-pt4a-ins" />
+		<error to="fail" />
+	</action>
+	<action cred="cred" name="d8-es-sdi-cust-site-asset-dn-pt4a-ins">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<configuration>
+				<property>
+					<name>oozie.launcher.mapreduce.map.memory.mb</name>
+					<value>${oozieLauncherMapreduceMapMemoryMb}</value>
+				</property>
+				<property>
+					<name>mapreduce.map.memory.mb</name>
+					<value>${mapreduceMapMemoryMb}</value>
+				</property>
+				<property>
+					<name>oozie.launcher.mapred.child.java.opts</name>
+					<value>${oozieLauncherMapredChildJavaOpts}</value>
+				</property>
+			</configuration>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8-es-sdi-cust-site-asset-dn-pt4a-ins</name>
+			<class>com.ncr.edl.apollo.es_sdi_cust_site_asset_dn.d8essdicustsiteassetdnpt4ainsRunner
+			</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties
+				${sparkConfCustom}
+			</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="d8-es-sdi-cust-site-asset-dn-pt5-ins" />
+		<error to="fail" />
+	</action>
+	<action cred="cred" name="d8-es-sdi-cust-site-asset-dn-pt5-ins">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<configuration>
+				<property>
+					<name>oozie.launcher.mapreduce.map.memory.mb</name>
+					<value>${oozieLauncherMapreduceMapMemoryMb}</value>
+				</property>
+				<property>
+					<name>mapreduce.map.memory.mb</name>
+					<value>${mapreduceMapMemoryMb}</value>
+				</property>
+				<property>
+					<name>oozie.launcher.mapred.child.java.opts</name>
+					<value>${oozieLauncherMapredChildJavaOpts}</value>
+				</property>
+			</configuration>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8-es-sdi-cust-site-asset-dn-pt5-ins</name>
+			<class>com.ncr.edl.apollo.es_sdi_cust_site_asset_dn.d8essdicustsiteassetdnpt5insRunner
+			</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties
+				${sparkConfCustom}
+			</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="d8-es-sdi-cust-site-asset-dn-pt5a-ins" />
+		<error to="fail" />
+	</action>
+	<action cred="cred" name="d8-es-sdi-cust-site-asset-dn-pt5a-ins">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<configuration>
+				<property>
+					<name>oozie.launcher.mapreduce.map.memory.mb</name>
+					<value>${oozieLauncherMapreduceMapMemoryMb}</value>
+				</property>
+				<property>
+					<name>mapreduce.map.memory.mb</name>
+					<value>${mapreduceMapMemoryMb}</value>
+				</property>
+				<property>
+					<name>oozie.launcher.mapred.child.java.opts</name>
+					<value>${oozieLauncherMapredChildJavaOpts}</value>
+				</property>
+			</configuration>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8-es-sdi-cust-site-asset-dn-pt5a-ins</name>
+			<class>com.ncr.edl.apollo.es_sdi_cust_site_asset_dn.d8essdicustsiteassetdnpt5ainsRunner
+			</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties
+				${sparkConfCustom}
+			</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="d8-es-sdi-cust-site-asset-dn-pt6-ins" />
+		<error to="fail" />
+	</action>
+	<action cred="cred" name="d8-es-sdi-cust-site-asset-dn-pt6-ins">
+		<spark xmlns="uri:oozie:spark-action:0.2">
+			<job-tracker>${job_tracker}</job-tracker>
+			<name-node>${name_node}</name-node>
+			<configuration>
+				<property>
+					<name>oozie.launcher.mapreduce.map.memory.mb</name>
+					<value>${oozieLauncherMapreduceMapMemoryMb}</value>
+				</property>
+				<property>
+					<name>mapreduce.map.memory.mb</name>
+					<value>${mapreduceMapMemoryMb}</value>
+				</property>
+				<property>
+					<name>oozie.launcher.mapred.child.java.opts</name>
+					<value>${oozieLauncherMapredChildJavaOpts}</value>
+				</property>
+			</configuration>
+			<master>${master}</master>
+			<mode>${mode}</mode>
+			<name>d8-es-sdi-cust-site-asset-dn-pt6-ins</name>
+			<class>com.ncr.edl.apollo.es_sdi_cust_site_asset_dn.d8essdicustsiteassetdnpt6insRunner
+			</class>
+			<jar>${jarHDFSPath}</jar>
+			<spark-opts>--queue ${queue_name} --properties-file user.properties
+				${sparkConfCustom}
+			</spark-opts>
+			<arg>${dbParamFileHDFSPath}</arg>
+			<arg>${activityCountRequired}</arg>
+		</spark>
+		<ok to="end" />
+		<error to="fail" />
+	</action>
+	<kill name="fail">
+		<message>Error while running workflow
+			es-sdi-cust-site-asset-dn-spark-scala-wf workflow:
+			[${wf:errorMessage(wf:lastErrorNode())}]</message>
+	</kill>
+	<end name="end" />
+</workflow-app>
