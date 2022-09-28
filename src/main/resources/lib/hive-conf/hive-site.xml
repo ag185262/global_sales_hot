@@ -652,7 +652,7 @@
     
     <property>
       <name>hive.server2.keystore.password</name>
-      <value>ucs4hadoop</value>
+      <value>*******</value>
     </property>
     
     <property>
